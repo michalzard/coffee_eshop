@@ -1,0 +1,30 @@
+header {
+  display: flex;
+  // position: fixed;
+  // top: 0;
+  // width: 100%;
+  align-items: center;
+  justify-content: space-around;
+  animation: breathe 4s infinite;
+  padding: 20px;
+  section {
+    display: flex;
+    a {
+      text-decoration: none;
+      margin: 0px 10px;
+    }
+  }
+  z-index: 10;
+}
+
+@keyframes breathe {
+  0% {
+    box-shadow: 0px 1px 15px rgb(0, 0, 0, 1);
+  }
+  50% {
+    box-shadow: 0px 1px 15px rgb(0, 0, 0, 0.7);
+  }
+  100% {
+    box-shadow: 0px 1px 15px rgb(0, 0, 0, 1);
+  }
+}
