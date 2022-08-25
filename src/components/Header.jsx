@@ -23,7 +23,8 @@ function Header() {
           <Typography>Contact</Typography>
         </Link>
         <Link to="/my-account">
-          <Typography>Account <ArrowDropDownIcon/></Typography>
+          <Typography>Account</Typography>
+          <ArrowDropDownIcon/>
         </Link>
       </section>
     </header>

@@ -1,17 +1,27 @@
 header {
   display: flex;
-  // position: fixed;
-  // top: 0;
-  // width: 100%;
+  background: url("../../assets/coffee-slider.jpg") round no-repeat fixed;
   align-items: center;
   justify-content: space-around;
   animation: breathe 4s infinite;
   padding: 20px;
+  color: white;
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
   section {
     display: flex;
+    align-items: center;
+    justify-content: center;
+
     a {
       text-decoration: none;
       margin: 0px 10px;
+      color: white;
+    }
+    a:last-child {
+      display: flex;
     }
   }
   z-index: 10;

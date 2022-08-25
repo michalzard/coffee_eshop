@@ -1,0 +1,23 @@
+.latest,
+.favourites {
+  display: flex;
+  flex-direction: column;
+  .showAll {
+    width: 25%;
+    align-self: center;
+    margin-bottom: 50px;
+  }
+  h3 {
+    text-align: center;
+  }
+}
+.product-list {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 25px;
+  div {
+    margin: 15px;
+  }
+}

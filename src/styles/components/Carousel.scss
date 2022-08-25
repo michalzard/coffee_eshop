@@ -1,13 +1,23 @@
+$carousel_height: 500px;
+
+.carousel-root {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: url("../../assets/coffee-slider.jpg") round no-repeat fixed;
+}
 .carousel {
-  height: 400px;
-  .slider-wrapper{
-    li{
-        height: 400px;
-        img{
-            height: 100%;
-            width: 100%;
-            object-fit:scale-down;
-        }
+  height: $carousel_height;
+  .slider-wrapper {
+    width: 50%;
+    li {
+      height: $carousel_height;
+      cursor: pointer;
+
+      img {
+        height: 100%;
+        object-fit: scale-down;
+      }
     }
   }
 }
