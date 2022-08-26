@@ -1,0 +1,21 @@
+@import "../../Theme.scss";
+.fresh-selection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  h2 {
+    color: $primary;
+  }
+  .filters {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-around;
+    .preparation,
+    .kind {
+      width: inherit;
+    }
+  }
+}
