@@ -1,0 +1,19 @@
+@import "../../Theme.scss";
+.about-us-desc {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 100px;
+  h2 {
+    color: $primary;
+    font-weight: bold;
+  }
+  .description {
+    text-align: justify;
+    padding: 50px;
+  }
+  .highlight {
+    color: $primary;
+  }
+}

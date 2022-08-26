@@ -1,31 +1,45 @@
 import { Routes, Route } from "react-router-dom";
 import "../src/styles/App.scss";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-import Carousel from "./components/Carousel";
-import DeliverySection from "./components/Sections/DeliverySection";
-import AboutUsSection from "./components/Sections/AboutUsSection";
-import LatestProducts from "./components/Sections/LatestProducts";
-import FavouriteProducts from "./components/Sections/FavouriteProducts";
-
+import {
+  Header,
+  Footer,
+  Carousel,
+  DeliverySection,
+  AboutUsSection,
+  LatestProducts,
+  FavouriteProducts,
+  Contact,
+  About,
+  FreshCoffee,
+} from "../src/components/index";
 
 function App() {
-return <div className="App">
-<Header/>
+  return (
+    <div className="App">
+      <Header />
 
-<Routes>
-<Route path="/" element={<>
-<Carousel/>
-<DeliverySection/>
-<LatestProducts/>
-<FavouriteProducts/>
-<AboutUsSection/>
-</>
-}/>
-</Routes>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <>
+              <Carousel />
+              <DeliverySection />
+              <LatestProducts />
+              <FavouriteProducts />
+              <AboutUsSection />
+            </>
+          }
+        />
 
-<Footer/>
-</div>
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/about-us" element={<About />} />
+        <Route path="fresh-coffee" element={<FreshCoffee />} />
+      </Routes>
+
+      <Footer />
+    </div>
+  );
 }
 
 export default App;

@@ -13,7 +13,7 @@ function Header() {
           <Typography>Home</Typography>
         </Link>
         <Link to="/fresh-coffee">
-          <Typography>Fresh Coffee</Typography>
+          <Typography className="coffee">Fresh Coffee</Typography>
         </Link>
 
         <Link to="/about-us">
