@@ -24,7 +24,7 @@ return (
   <Typography className="t">Opening Hours:</Typography>
   <Typography>Mo - Fri 8:00 - 16:00</Typography>
   <Typography>Sat - Sun : <span style={{color:"red"}}>Closed</span></Typography>
-  <div className="links">
+  <div className="links longer">
     <div>
       <FacebookIcon />
       <TwitterIcon />

@@ -4,10 +4,16 @@ footer {
   padding: 50px;
   section {
     margin: 20px;
+    .highlight {
+      color: $primary;
+    }
   }
-  div {
+  .info {
     display: flex;
     justify-content: center;
+    @media (max-width: 800px) {
+      flex-direction: column;
+    }
   }
   .links {
     display: flex;
@@ -23,14 +29,10 @@ footer {
   }
   .copyright {
     text-align: center;
-    margin-top:50px;
+    margin-top: 50px;
     a {
       text-decoration: none;
-      color:$primary;
+      color: $primary;
     }
   }
-}
-
-.t{
-    color:$primary;
 }

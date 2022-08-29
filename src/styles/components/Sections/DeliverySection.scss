@@ -5,17 +5,18 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
 .highlights {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding:100px 50px;
-
+  padding: 50px 40px;
+  flex-wrap: wrap;
 }
 
-$circular: 230px;
+$circular: 200px;
 
 .circular_highlight {
   background-color: whitesmoke;
@@ -28,7 +29,7 @@ $circular: 230px;
   flex-direction: column;
   text-align: center;
   svg {
-    font-size: 60px;
+    font-size: 50px;
   }
   align-items: center;
   justify-content: center;

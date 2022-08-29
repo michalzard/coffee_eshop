@@ -9,7 +9,7 @@ import InstagramIcon from "@mui/icons-material/Instagram";
 function Footer() {
   return (
     <footer>
-      <div>
+      <div className="info">
         <section>
           <Typography variant="h5">All regarding purchase</Typography>
           <Typography>Business Terms</Typography>
@@ -24,15 +24,15 @@ function Footer() {
         </section>
         <section>
           <Typography variant="h5">Contact us</Typography>
-          <Typography className="t">Address:</Typography>
+          <Typography className="highlight">Address:</Typography>
           <Typography>Some address 123, Zipcode, City</Typography>
-          <Typography className="t">Contact email:</Typography>
+          <Typography className="highlight">Contact email:</Typography>
           <Typography>example@example.com</Typography>
 
-          <Typography className="t">Contact Number:</Typography>
+          <Typography className="highlight">Contact Number:</Typography>
           <Typography>+412 123 456 789</Typography>
 
-          <Typography className="t">Opening Hours:</Typography>
+          <Typography className="highlight">Opening Hours:</Typography>
           <Typography>Mo - Fri 8:00 - 16:00</Typography>
           <Typography>Sat - Sun : <span style={{color:"red"}}>Closed</span></Typography>
         </section>

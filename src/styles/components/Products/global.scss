@@ -3,7 +3,7 @@
   display: flex;
   flex-direction: column;
   .showAll {
-    width: 25%;
+    width: 50%;
     align-self: center;
     margin-bottom: 50px;
   }
@@ -17,7 +17,7 @@
   justify-content: center;
   flex-wrap: wrap;
   padding: 25px;
-  div {
-    margin: 15px;
+  @media (max-width:800px) {
+    padding:25px 0px;
   }
 }

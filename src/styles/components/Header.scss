@@ -1,21 +1,21 @@
 @import "../Theme.scss";
 header {
-  display: flex;
   background: url("../../assets/coffee-slider.jpg") round no-repeat fixed;
-  align-items: center;
-  justify-content: space-around;
   animation: breathe 4s infinite;
   padding: 20px;
   color: white;
   position: sticky;
   top: 0;
   left: 0;
-  width: 100%;
-  section {
+  .header_section {
+    width: 100%;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
 
+    .h_links {
+      display: flex;
+    }
     a {
       text-decoration: none;
       margin: 0px 10px;
@@ -40,5 +40,13 @@ header {
   }
   100% {
     box-shadow: 0px 1px 15px rgb(0, 0, 0, 1);
+  }
+}
+
+#navMenu > div > ul {
+  background: url("../../assets/coffee-slider.jpg");
+  a {
+    color: white;
+    text-decoration: none;
   }
 }
