@@ -11,16 +11,16 @@ import {
   Contact,
   About,
   FreshCoffee,
+  ProductOrder,
 } from "../src/components/index";
 import { useEffect } from "react";
-import ProductOrder from "./components/Products/ProductOrder";
 
-function ScrollToTop(){
+function ScrollToTop() {
   //on every pathname change scroll to top to display important things
-  const {pathname} = useLocation();
-  useEffect(()=>{
-  document.body.scrollTo({top:0,left:0});
-  },[pathname]);
+  const { pathname } = useLocation();
+  useEffect(() => {
+    document.body.scrollTo({ top: 0, left: 0 });
+  }, [pathname]);
   return null;
 }
 
@@ -28,7 +28,7 @@ function App() {
   return (
     <div className="App">
       <Header />
-      <ScrollToTop/>
+      <ScrollToTop />
       <Routes>
         <Route
           path="/"
@@ -46,12 +46,21 @@ function App() {
         <Route path="contact" element={<Contact />} />
         <Route path="about-us" element={<About />} />
         <Route path="fresh-coffee" element={<FreshCoffee />} />
-        <Route path="my-account" element={<div style={{color:"red",fontSize:"30px"}}>Login Stuff</div>}/>
+        <Route
+          path="my-account"
+          element={
+            <div style={{ color: "red", fontSize: "30px" }}>Login Stuff</div>
+          }
+        />
 
-        <Route path="product/:id"  element={<ProductOrder/>} />
-        
+        <Route path="product/:id" element={<ProductOrder />} />
 
-        <Route path="*" element={<div style={{color:"red",fontSize:"30px"}}>NOT FOUND</div>} />
+        <Route
+          path="*"
+          element={
+            <div style={{ color: "red", fontSize: "30px" }}>NOT FOUND</div>
+          }
+        />
       </Routes>
 
       <Footer />

@@ -8,7 +8,7 @@ import FavouriteProducts from "./Sections/FavouriteProducts";
 import Contact from "./Sections/Contact";
 import About from "./Sections/About";
 import FreshCoffee from "./Sections/FreshCoffee";
-
+import ProductOrder from "./Products/ProductOrder";
 export {
   Header,
   Footer,
@@ -20,4 +20,5 @@ export {
   Contact,
   About,
   FreshCoffee,
+  ProductOrder
 };

@@ -28,9 +28,9 @@ function FreshCoffee() {
         <div className="preparation">
           <Typography>Filter by preparation</Typography>
           <FormControl className="filterForm" fullWidth>
-            <InputLabel id="demo-simple-select-label">Preparation</InputLabel>
+            <InputLabel id="filter-label">Preparation</InputLabel>
             <Select
-              labelId="demo-simple-select-label"
+              labelId="filter-label"
               value={prepValue}
               onChange={(e)=>setPrepValue(e.target.value)}
             >
@@ -43,9 +43,9 @@ function FreshCoffee() {
         <div className="kind">
           <Typography>Filter by kind</Typography>
           <FormControl className="filterForm" fullWidth>
-            <InputLabel id="demo-simple-select-label">Kind</InputLabel>
+            <InputLabel id="demo-simple-select-labe2l">Kind</InputLabel>
             <Select
-              labelId="demo-simple-select-label"
+              labelId="demo-simple-select-labe2l"
               id="demo-simple-select"
               value={prepValue}
               onChange={(e)=>setPrepValue(e.target.value)}

@@ -1,0 +1,60 @@
+@import "../../Theme.scss";
+
+.productOrder {
+  display: flex;
+  .imgs {
+    flex: 1;
+  }
+  .info {
+    flex: 1;
+    margin: 20px;
+    .title {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      font-weight: 700;
+      svg {
+        margin-left: 20px;
+      }
+    }
+
+    .rating {
+      margin-bottom: 10px;
+    }
+    .pricing {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .price {
+        color: crimson;
+      }
+      .amount {
+        width: 80px;
+        margin-right: 10px;
+      }
+    }
+    .specifications {
+      display: flex;
+      flex-direction: column;
+
+      section {
+        display: flex;
+        align-items: center;
+        padding: 20px;
+        p {
+          width: 200px;
+        }
+      }
+      .removeFields {
+        color: $primary;
+      }
+      .grinding,
+      .roasting {
+        background-color: whitesmoke;
+      }
+    }
+    .removeFields {
+      cursor: pointer;
+    }
+  }
+}
