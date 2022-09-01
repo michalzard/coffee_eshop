@@ -1,18 +1,20 @@
-import React from 'react'
-import HomeIcon from '@mui/icons-material/Home';
-import { Button } from '@mui/material';
-
+import React from "react";
+import HomeIcon from "@mui/icons-material/Home";
+import { Button } from "@mui/material";
+import "../../styles/components/Products/ProductReviews.scss";
 function ProductReviews() {
-
   return (
     <section className="reviews">
-    <div className="tabs">
-    <Button variant="text" color="inherit"><HomeIcon/></Button>
-    <Button variant="text" color="inherit">Reviews</Button>
-    </div>
-
+      <div className="tabs">
+        <Button variant="text" color="inherit">
+          <HomeIcon />
+        </Button>
+        <Button variant="text" color="inherit">
+          Reviews
+        </Button>
+      </div>
     </section>
-  )
+  );
 }
 
 export default ProductReviews;

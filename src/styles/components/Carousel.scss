@@ -4,15 +4,13 @@ $carousel_height: 610px;
   height: $carousel_height;
   display: flex;
 
-  background: url("../../assets/coffee-slider.jpg") no-repeat;
+  background: url("../../assets/coffee-slider.jpg") round fixed;
   background-size: auto;
   .slider-wrapper {
     width: 60%;
     overflow: hidden;
     li {
-      height: $carousel_height/2;
-      cursor: pointer;
-
+      height: calc($carousel_height/2);
       img {
         height: 100%;
         object-fit: scale-down;

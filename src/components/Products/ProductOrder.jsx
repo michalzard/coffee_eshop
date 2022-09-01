@@ -27,7 +27,6 @@ function ProductOrder() {
   };
   return (
     <>
-      {/* TODO : STYLE THIS WHOLE THING */}
       <section className="productOrder">
         <div className="imgs">
           <img src="broken" className="mainImg" alt="example"></img>

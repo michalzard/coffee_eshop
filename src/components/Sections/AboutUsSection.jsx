@@ -6,7 +6,7 @@ import {Link} from "react-router-dom";
 function AboutUsSection() {
   return (
     <div className="about-us">
-      <img src="broken" />
+      <img src="broken" alt="broken"/>
       <section>
         <Typography gutterBottom>
           We bring you coffee from different corners of the world. We use a
