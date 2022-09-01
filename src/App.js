@@ -14,6 +14,8 @@ import {
   ProductOrder,
 } from "../src/components/index";
 import { useEffect } from "react";
+import { fetchProducts } from "./controllers/products";
+import { addToCart, cartItems, fetchCart } from "./controllers/cart";
 
 function ScrollToTop() {
   //on every pathname change scroll to top to display important things
@@ -25,6 +27,21 @@ function ScrollToTop() {
 }
 
 function App() {
+  useEffect(() => {
+    let isSubscribed = true;
+
+    async function getProducts() {
+      const products = await fetchProducts();
+      const cart = await fetchCart();
+      // const contents = await cartContents();
+      if (isSubscribed) {
+        //handle response
+        console.log(products,cart);
+      }
+    }
+    getProducts();
+    return () => (isSubscribed = false);
+  }, []);
   return (
     <div className="App">
       <Header />
