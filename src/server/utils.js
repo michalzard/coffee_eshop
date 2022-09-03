@@ -9,13 +9,17 @@ function handleValidationErrors(response, errorObject) {
   } else response.status(400).send({ message: errorObject.response });
 }
 
-const mongoose = require("mongoose");
-
 async function checkForSession(sessionId){
+  const mongoose = require("mongoose");
   return await mongoose.connection.db.collection("sessions").findOne({_id:sessionId});
+}
+
+function getSessionCookie(cookie){
+  return cookie.split("session_id=")[1];
 }
 
 module.exports = {
   handleValidationErrors,
   checkForSession,
+  getSessionCookie
 };

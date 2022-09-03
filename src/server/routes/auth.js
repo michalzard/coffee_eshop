@@ -1,9 +1,8 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
-const mongoose = require("mongoose");
 const router = express.Router();
 const User=require("../schemas/User");
-const {handleValidationErrors} = require("../utils");
+const {handleValidationErrors,checkForSession, getSessionCookie} = require("../utils");
 const Email = require("@sendgrid/mail");
 Email.setApiKey(process.env.EMAIL_API_KEY);
 const ResetToken = require("../schemas/ResetToken");
@@ -20,23 +19,21 @@ router.post('/register',async (req,res)=>{
 try{
 const {email,name,password}=req.body;
 if(name && email && password){
-    //find if there's already user with same name or email
-    const duplicates=await User.find({'$or':[{displayName:name},{email}]});
-    if(!/^[A-Za-z0-9]*$/.test(name)){res.status(400).send({message:"Username can only contain letters and numbers"});return;}
-    if(password.length < 5) { res.status(400).send({message:"Password needs to be atleast 5 characters"});return;}
-    if(duplicates.length>0) {
-    res.status(400).send({message:"Username or email already in use"});
-    return;
-    }
-    else{
-        const hashedPw=await bcrypt.hashSync(password,12);
-        const registeredUser=new User({email,displayName:name,tag:name,password:hashedPw});
-        if(registeredUser){
-        await registeredUser.save();
-        req.session.user_id=registeredUser._id;
-        res.status(200).send({message:"User registered successfully",sessionID:req.session.id});
-        }
-        }
+//find if there's already user with same name or email
+const duplicates=await User.find({'$or':[{displayName:name},{email}]});
+if(!/^[A-Za-z0-9]*$/.test(name)){res.status(400).send({message:"Username can only contain letters and numbers"});return;}
+if(password.length < 5) { res.status(400).send({message:"Password needs to be atleast 5 characters"});return;}
+if(duplicates.length>0) {res.status(400).send({message:"Username or email already in use"});return;}
+else{
+const hashedPw=await bcrypt.hashSync(password,12);
+const registeredUser=new User({email,displayName:name,tag:name,password:hashedPw});
+if(registeredUser){
+const user=await registeredUser.save();
+req.session.user_id=registeredUser._id;
+res.cookie("session_id",req.session.id,{httpOnly:true,maxAge: 1000 * 60 * 60 * 24, /*1 day*/ });
+res.status(200).send({message:"User registered successfully",user});
+}
+}
 }else{
     res.status(400).send({message:"Bad Request"});
 }
@@ -49,20 +46,20 @@ if(name && email && password){
 router.post('/login',async(req,res)=>{
 try{
 const {name,password}=req.body;
-const userQuery=await User.find({displayName:name});
-const foundUser=userQuery[0];
+const foundUser=await User.findOne({displayName:name},{password:0,email:0});
 if(foundUser){
 req.session.user_id=foundUser._id;
 req.session.save();
+// const foundSession=await mongoose.connection.db.collection("sessions").findOne({_id:req.sessionID});
 const validatedPw=await bcrypt.compare(password,foundUser.password);
-const foundSession=await mongoose.connection.db.collection("sessions").findOne({_id:req.sessionID});
+res.cookie("session_id",req.session.id,{httpOnly:true,maxAge: 1000 * 60 * 60 * 24, /*1 day*/ });
 
-if(foundSession){
-const {_id}  = foundSession;
-if(_id !== req.sessionID) req.session.destroy();
-if(validatedPw) res.status(200).send({message:"Login successful",sessionID:_id});
+// if(foundSession){
+// const {_id}  = foundSession;
+// if(_id !== req.sessionID) req.session.destroy();
+if(validatedPw) res.status(200).send({message:"Login successful",user:foundUser});
 else res.status(200).send({message:"Username or password you entered is incorrect"});  
-}else res.status(401).send({message:"Unauthorized"});  
+// }else res.status(401).send({message:"Unauthorized"});  
 }else res.status(400).send({message:"Username or password you entered is incorrect"});  
 }catch(err){
     handleValidationErrors(res,err);
@@ -72,8 +69,8 @@ else res.status(200).send({message:"Username or password you entered is incorrec
 
 router.post('/logout',async (req,res)=>{
 try{
-    const{id}=req.body;
-    const removedSession=await mongoose.connection.db.collection("sessions").findOneAndDelete({_id:id});
+    const id = getSessionCookie(req.headers.cookie);
+    const removedSession=await checkForSession(id);
     req.session.destroy(err=>{if(err){console.log(err)}}); //removes old session object if it didnt expire yet
     if(removedSession.value){res.status(200).send({message:"User successfully logged out!"});}
     else{res.status(200).send({message:"Session expired!"});}
@@ -89,13 +86,16 @@ if not send response back to delete last session and make them log in*/
 
 router.get('/session',async(req,res)=>{
 try{
-const {id}=req.body;
-const foundSession=await mongoose.connection.db.collection("sessions").findOne({_id:id});
+const id = getSessionCookie(req.headers.cookie);
+const foundSession=await checkForSession(id);
+//load session_id from cookie grab session user
+// return user object
 if(foundSession){
-const{_id}=foundSession;
-res.status(200).send({message:"Session found",sessionID:_id});
+const{user_id}=foundSession.session;
+const user = await User.findById(user_id,{password:0});
+res.status(200).send({message:"Session found",user});
 }else{
-res.status(200).send({message:"Session expired!"});
+    res.status(404).send({message:"cannot find user session"});
 }
 }catch(err){
     handleValidationErrors(res,err);

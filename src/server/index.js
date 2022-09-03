@@ -5,10 +5,11 @@ const session = require("express-session");
 const mongoose = require("mongoose");
 const mongoDBStore = require("connect-mongodb-session")(session);
 require("dotenv").config();
+
 //connect to db before everything
 mongoose
   .connect(
-    process.env.DATABASE_URI || "mongodb://localhost:27017/Lunar_Localhost",
+    process.env.DATABASE_URI || "mongodb://localhost:27017/Coffee_Eshop",
     { useNewUrlParser: true, useUnifiedTopology: true }
   )
   .then(() => console.log("database connected"))
@@ -33,7 +34,14 @@ app.use(
   })
 );
 
-app.use(cors());
+const whitelist = ["http://localhost:3000"];
+const corsOptions = {
+  credentials: true, // This is important.
+  origin: (origin, callback) => {
+    if (whitelist.includes(origin)) return callback(null, true);
+  },
+};
+app.use(cors(corsOptions));
 //enables receiving json trough req.body
 app.use(express.json());
 //enables receiving formData trough req.body
@@ -41,7 +49,7 @@ app.use(express.json());
 
 const authRoute = require("./routes/auth");
 
-app.use("/auth",authRoute);
+app.use("/auth", authRoute);
 
 //You need to specificy SERVER_PORT as key:value in .env file
 app.listen(process.env.PORT || 5000, () => {
