@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import "../src/styles/App.scss";
 import {
@@ -12,10 +13,13 @@ import {
   About,
   FreshCoffee,
   ProductOrder,
+  Login,
+  NotFound,
 } from "../src/components/index";
-import { useEffect } from "react";
-// import { fetchProducts } from "./controllers/products";
-// import { addToCart, cartItems, fetchCart } from "./controllers/cart";
+import axios from "axios";
+import { BASE_URI } from "./lib/base_uri";
+import { useDispatch } from "react-redux";
+import { onSessionLoad } from "./controllers/store/authSlice";
 
 function ScrollToTop() {
   //on every pathname change scroll to top to display important things
@@ -27,21 +31,21 @@ function ScrollToTop() {
 }
 
 function App() {
-  // useEffect(() => {
-  //   let isSubscribed = true;
+  const dispatch = useDispatch();
+  useEffect(() => {
+    let isSubsribed = true;
 
-  //   async function getProducts() {
-  //     const products = await fetchProducts();
-  //     const cart = await fetchCart();
-  //     // const contents = await cartContents();
-  //     if (isSubscribed) {
-  //       //handle response
-  //       console.log(products,cart);
-  //     }
-  //   }
-  //   getProducts();
-  //   return () => (isSubscribed = false);
-  // }, []);
+    if (isSubsribed) {
+      axios
+        .get(`${BASE_URI}/auth/session`, { withCredentials: true })
+        .then((data) => {
+          const { user } = data.data;
+          dispatch(onSessionLoad({ user }));
+        })
+        .catch((err) => console.log(err));
+    }
+    return () => (isSubsribed = false);
+  }, [dispatch]);
   return (
     <div className="App">
       <Header />
@@ -63,21 +67,11 @@ function App() {
         <Route path="contact" element={<Contact />} />
         <Route path="about-us" element={<About />} />
         <Route path="fresh-coffee" element={<FreshCoffee />} />
-        <Route
-          path="my-account"
-          element={
-            <div style={{ color: "red", fontSize: "30px" }}>Login Stuff</div>
-          }
-        />
+        <Route path="my-account" element={<Login />} />
 
         <Route path="product/:id" element={<ProductOrder />} />
 
-        <Route
-          path="*"
-          element={
-            <div style={{ color: "red", fontSize: "30px" }}>NOT FOUND</div>
-          }
-        />
+        <Route path="*" element={<NotFound />} />
       </Routes>
 
       <Footer />
