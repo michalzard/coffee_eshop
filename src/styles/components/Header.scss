@@ -18,13 +18,15 @@ header {
       align-items: center;
       justify-content: center;
     }
-    a {
+    a,
+    .account-btn {
       text-decoration: none;
       margin: 0px 10px;
       color: white;
     }
-    a:last-child {
+    .account-btn {
       display: flex;
+      cursor: pointer;
     }
   }
   z-index: 10;
@@ -50,5 +52,13 @@ header {
   a {
     color: white;
     text-decoration: none;
+    display: flex;
+    align-items: center;
+  }
+  li {
+    color: white;
+  }
+  svg {
+    margin-right: 10px;
   }
 }

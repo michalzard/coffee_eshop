@@ -10,7 +10,7 @@ function NotFound() {
     <section className="page_notfound">
     <Typography variant="h3" gutterBottom>Page not found.</Typography>
     <Typography variant="subtitle1" gutterBottom>Oh,we can't seem to find the page you're looking for.</Typography>
-    <Button variant="outlined" onClick={()=>{navigate("/")}} size="large">Go back</Button>    
+    <Button variant="outlined" onClick={()=>{navigate(-1);}} size="large">Go back</Button>    
     <img src={NotFoundIcon} alt="Page not found"/>
     </section>
   )

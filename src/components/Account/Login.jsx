@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { Button, TextField, Typography } from "@mui/material";
-import "../../styles/components/Sections/Login.scss";
+import "../../styles/components/Account/Login.scss";
 import axios from "axios";
 import { BASE_URI } from "../../lib/base_uri";
-// import { register } from "../../controllers/store/userSlice";
-// import { useDispatch } from "react-redux";
+import { login } from "../../controllers/store/authSlice";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [loginUsername, setLoginUsername] = useState("");
@@ -12,7 +13,8 @@ function Login() {
   const [registerUsername, setRegisterUsername] = useState("");
   const [registerEmail, setRegisterEmail] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
-
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const isLoginFilled = () => {
     return loginUsername.length > 0 && loginPassword.length > 0;
   };
@@ -24,11 +26,8 @@ function Login() {
     );
   };
 
-//   const dispatch = useDispatch();
-
   const submitLogin = () => {
-    setLoginUsername("");
-    setLoginPassword("");
+    if(registerUsername.length === 0 || registerEmail.length === 0 || registerPassword === 0) return;
     axios.post(`${BASE_URI}/auth/login`, {
         name: loginUsername,
         password: loginPassword,
@@ -36,14 +35,19 @@ function Login() {
         withCredentials:true,
       })
       .then((data) => {
-        console.log(data.data);
-        setRegisterUsername("");
-        setRegisterEmail("");
-        setRegisterPassword("");
+        const {user} = data.data;
+        if(user) {
+          dispatch(login({user}));
+          navigate("/my-account");
+        }
+      setLoginUsername("");
+      setLoginPassword("");
       })
       .catch((err) => console.log(err));
+      
   };
   const submitRegister = () => {
+    if(registerUsername.length === 0 || registerEmail.length === 0 || registerPassword === 0) return;
     axios.post(`${BASE_URI}/auth/register`, {
         name: registerUsername,
         email: registerEmail,
@@ -52,7 +56,11 @@ function Login() {
         withCredentials:true,
       })
       .then((data) => {
-        console.log(data.data);
+        const {user} = data.data;
+        if(user) {
+        dispatch(login({user}));
+        navigate("/my-account");
+        }
         setRegisterUsername("");
         setRegisterEmail("");
         setRegisterPassword("");
@@ -60,6 +68,7 @@ function Login() {
       .catch((err) => console.log(err));
   };
 
+  
   return (
     <section className="auth_container">
       <Typography variant="h2" gutterBottom>

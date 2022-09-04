@@ -1,0 +1,62 @@
+@import "../../Theme.scss";
+
+@mixin container {
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+}
+.account-details {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  h2 {
+    text-align: center;
+  }
+  .title {
+    margin-bottom: 20px;
+    color: $primary;
+  }
+  .account-content {
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .sidebar {
+    @include container();
+  }
+  .desc {
+    @include container();
+  }
+}
+
+.user-info,
+.password-change,
+.address-containter,
+.payment-method-container,
+.order-container {
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+
+  .MuiTextField-root {
+    margin: 5px 0;
+  }
+}
+.desc {
+  button {
+    width: 50%;
+    margin-left: 10px;
+  }
+}
+
+.payment-method-notfound {
+  display: flex;
+  border-top: 3px solid $primary;
+  background-color: whitesmoke;
+  padding: 15px;
+  margin-bottom: 15px;
+  svg {
+    color: $primary;
+    margin-right: 10px;
+  }
+}

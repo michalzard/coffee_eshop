@@ -8,11 +8,13 @@
   padding: 10px;
   margin: 5px;
   img {
-    max-width: 320px;
-    max-height: 420px;
+    width: 320px;
+    height: 420px;
+    object-fit:cover;
+    border-radius: 10px;
     @media (max-width: 800px) {
-      max-width: 160px;
-      max-height: 220px;
+      width: 160px;
+      height: 220px;
     }
   }
   .pricing {

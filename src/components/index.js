@@ -9,8 +9,14 @@ import Contact from "./Sections/Contact";
 import About from "./Sections/About";
 import FreshCoffee from "./Sections/FreshCoffee";
 import ProductOrder from "./Products/ProductOrder";
-import Login from "./Sections/Login";
 import NotFound from "./NotFound";
+import Login from "./Account/Login";
+import AccountDetails, {
+  AccountDetailsContainer,
+  AddressContainer,
+  OrdersContainer,
+  PaymentMethodsContainer,
+} from "./Account/AccountDetails";
 export {
   Header,
   Footer,
@@ -23,6 +29,11 @@ export {
   About,
   FreshCoffee,
   ProductOrder,
+  NotFound,
   Login,
-  NotFound
+  AccountDetails,
+  AccountDetailsContainer,
+  AddressContainer,
+  OrdersContainer,
+  PaymentMethodsContainer,
 };

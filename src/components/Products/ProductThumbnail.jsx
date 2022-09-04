@@ -17,7 +17,7 @@ function ProductThumbnail({ name, img, pricing, rating }) {
       <Rating defaultValue={rating} readOnly />
 
       <Typography variant="body2" gutterBottom className="pricing">
-        8,70 € - 25,00 € with VAT
+       {pricing || "11.11€"} with VAT
       </Typography>
       <Link to="/product/:id">
         <Button variant="outlined">Select options</Button>

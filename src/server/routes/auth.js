@@ -2,7 +2,7 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const router = express.Router();
 const User=require("../schemas/User");
-const {handleValidationErrors,checkForSession, getSessionCookie} = require("../utils");
+const {handleValidationErrors,checkForSession, getSessionCookie, deleteSession} = require("../utils");
 const Email = require("@sendgrid/mail");
 Email.setApiKey(process.env.EMAIL_API_KEY);
 const ResetToken = require("../schemas/ResetToken");
@@ -46,18 +46,17 @@ res.status(200).send({message:"User registered successfully",user});
 router.post('/login',async(req,res)=>{
 try{
 const {name,password}=req.body;
-const foundUser=await User.findOne({displayName:name},{password:0,email:0});
+const foundUser=await User.findOne({displayName:name});
 if(foundUser){
 req.session.user_id=foundUser._id;
 req.session.save();
-// const foundSession=await mongoose.connection.db.collection("sessions").findOne({_id:req.sessionID});
 const validatedPw=await bcrypt.compare(password,foundUser.password);
 res.cookie("session_id",req.session.id,{httpOnly:true,maxAge: 1000 * 60 * 60 * 24, /*1 day*/ });
 
-// if(foundSession){
-// const {_id}  = foundSession;
-// if(_id !== req.sessionID) req.session.destroy();
-if(validatedPw) res.status(200).send({message:"Login successful",user:foundUser});
+if(validatedPw) {
+    //remove password field from response
+    res.status(200).send({message:"Login successful",user:foundUser});
+}
 else res.status(200).send({message:"Username or password you entered is incorrect"});  
 // }else res.status(401).send({message:"Unauthorized"});  
 }else res.status(400).send({message:"Username or password you entered is incorrect"});  
@@ -70,9 +69,10 @@ else res.status(200).send({message:"Username or password you entered is incorrec
 router.post('/logout',async (req,res)=>{
 try{
     const id = getSessionCookie(req.headers.cookie);
-    const removedSession=await checkForSession(id);
-    req.session.destroy(err=>{if(err){console.log(err)}}); //removes old session object if it didnt expire yet
-    if(removedSession.value){res.status(200).send({message:"User successfully logged out!"});}
+    //clear cookie there removing session on client side and delete session from db
+    const session=await deleteSession(id);
+    res.clearCookie("session_id");
+    if(session.value){res.status(200).send({message:"User successfully logged out!"});}
     else{res.status(200).send({message:"Session expired!"});}
 }catch(err){
     handleValidationErrors(res,err);
@@ -95,7 +95,7 @@ const{user_id}=foundSession.session;
 const user = await User.findById(user_id,{password:0});
 res.status(200).send({message:"Session found",user});
 }else{
-    res.status(404).send({message:"cannot find user session"});
+    res.status(404).send({message:"User session expired"});
 }
 }catch(err){
     handleValidationErrors(res,err);

@@ -2,18 +2,28 @@ import React, { useState } from "react";
 import { Typography, useMediaQuery, Menu, MenuItem } from "@mui/material";
 import { Link } from "react-router-dom";
 import "../styles/components/Header.scss";
+import { store } from "../controllers/store/store";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import MenuIcon from "@mui/icons-material/Menu";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import { store } from "../controllers/store/store";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
+import ListAltIcon from "@mui/icons-material/ListAlt";
+import LogoutIcon from '@mui/icons-material/Logout';
+import axios from "axios";
+import { BASE_URI } from "../lib/base_uri";
+import { useDispatch } from "react-redux";
+import { logout } from "../controllers/store/authSlice";
 
 function Header() {
   const isMobile = useMediaQuery("(max-width:800px)");
   const [menuAnchor, setMenuAnchor] = useState(null);
+  const [secondaryMenuAnchor,setSecondaryAnchor] = useState(null);
   const closeMenu = () => setMenuAnchor(null);
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   store.subscribe(() => {
-    const {isLoggedIn} = store.getState().authState;
+    const { isLoggedIn } = store.getState().authState;
     setIsLoggedIn(isLoggedIn);
   });
 
@@ -24,6 +34,7 @@ function Header() {
           <Link to="/">
             <Typography>Logo</Typography>
           </Link>
+
           <MenuIcon
             onClick={(e) => {
               setMenuAnchor(e.currentTarget);
@@ -35,32 +46,43 @@ function Header() {
             open={Boolean(menuAnchor)}
             onClose={closeMenu}
           >
-            <MenuItem onClick={closeMenu}>
-              <Link to="/"> Home </Link>
+              <Link to="/"> 
+            <MenuItem key={0} onClick={closeMenu}>
+              Home
             </MenuItem>
-            <MenuItem onClick={closeMenu}>
-              <Link to="/fresh-coffee">Fresh Coffee</Link>
+               </Link>
+              <Link to="/fresh-coffee">
+            <MenuItem key={1} onClick={closeMenu}>
+                Fresh Coffee
             </MenuItem>
-            <MenuItem onClick={closeMenu}>
-              <Link to="/about-us">About</Link>
+                </Link>
+              <Link to="/about-us">
+            <MenuItem key={2} onClick={closeMenu}>
+                About
             </MenuItem>
-            <MenuItem onClick={closeMenu}>
-              <Link to="/contact">Contact</Link>
+                </Link>
+              <Link to="/contact">
+            <MenuItem key={3} onClick={closeMenu}>
+                Contact
             </MenuItem>
-            <MenuItem>
+                </Link>
               {isLoggedIn ? (
                 <Link to="/cart">
+            <MenuItem key={4} >
                   <ShoppingCartIcon />
+            </MenuItem>
                 </Link>
               ) : null}
-            </MenuItem>
-            <MenuItem onClick={closeMenu}>
-              <Link to="/my-account">
+
+            <MenuItem key={5} onClick={(e) => setSecondaryAnchor(e.currentTarget)}>
                 Account
                 <ArrowDropDownIcon />
-              </Link>
             </MenuItem>
           </Menu>
+          <AccountMenu
+              menuAnchor={secondaryMenuAnchor}
+              closeMenu={()=>{setSecondaryAnchor(null)}}
+            />
         </section>
       ) : (
         <section className="header_section">
@@ -86,10 +108,18 @@ function Header() {
               </Link>
             ) : null}
 
-            <Link to="/my-account">
+            <section
+              className="account-btn"
+              onClick={(e) => setMenuAnchor(e.currentTarget)}
+            >
               <Typography>Account</Typography>
               <ArrowDropDownIcon />
-            </Link>
+            </section>
+            {/* DESKTOP MENU */}
+            <AccountMenu
+              menuAnchor={menuAnchor}
+              closeMenu={closeMenu}
+            />
           </section>
         </section>
       )}
@@ -98,3 +128,48 @@ function Header() {
 }
 
 export default Header;
+
+function AccountMenu({ menuAnchor, closeMenu }) {
+  const dispatch = useDispatch();
+  const submigLogout=()=>{
+    axios.post(`${BASE_URI}/auth/logout`,{},{withCredentials:true}).then(data=>{
+      const {message} = data.data;
+      if(message) dispatch(logout());
+    })
+  }
+  return (
+    <Menu
+      id="navMenu"
+      anchorEl={menuAnchor}
+      open={Boolean(menuAnchor)}
+      disableScrollLock={true}
+      onClose={closeMenu}
+    >
+      <MenuItem key={0} onClick={closeMenu}>
+        <Link to="/my-account">
+          <AccountCircleIcon />
+          My Account
+        </Link>
+      </MenuItem>
+      <MenuItem key={1} onClick={closeMenu}>
+        <Link to="/my-account">
+          <ManageAccountsIcon />
+          Account Details
+        </Link>
+      </MenuItem>
+      <MenuItem key={2} onClick={closeMenu}>
+        <Link to="/my-account/orders">
+          <ListAltIcon />
+          Orders
+        </Link>
+      </MenuItem>
+      <MenuItem key={3} onClick={()=>{submigLogout();closeMenu();}}>
+        <Link to="/my-account">
+          <LogoutIcon />
+          Logout
+        </Link>
+      </MenuItem>
+     
+    </Menu>
+  );
+}

@@ -9,17 +9,22 @@ function handleValidationErrors(response, errorObject) {
   } else response.status(400).send({ message: errorObject.response });
 }
 
+const mongoose = require("mongoose");
 async function checkForSession(sessionId){
-  const mongoose = require("mongoose");
   return await mongoose.connection.db.collection("sessions").findOne({_id:sessionId});
+}
+async function deleteSession(sessionId){
+  return await mongoose.connection.db.collection("sessions").findOneAndDelete({_id:sessionId});
 }
 
 function getSessionCookie(cookie){
-  return cookie.split("session_id=")[1];
+  if(typeof cookie === "string") return cookie.split("session_id=")[1];
+  return;
 }
 
 module.exports = {
   handleValidationErrors,
   checkForSession,
+  deleteSession,
   getSessionCookie
 };

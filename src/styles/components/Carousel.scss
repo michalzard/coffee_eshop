@@ -17,4 +17,13 @@ $carousel_height: 610px;
       }
     }
   }
+  .slide-selected{
+    height: 100%;
+    background-color: red;
+  }
+}
+.carousel-showcase-photo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

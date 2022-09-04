@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import "../src/styles/App.scss";
 import {
@@ -15,10 +15,16 @@ import {
   ProductOrder,
   Login,
   NotFound,
+  AccountDetails,
+  AccountDetailsContainer,
+  PaymentMethodsContainer,
+  AddressContainer,
+  OrdersContainer,
 } from "../src/components/index";
 import axios from "axios";
 import { BASE_URI } from "./lib/base_uri";
 import { useDispatch } from "react-redux";
+import { store } from "./controllers/store/store";
 import { onSessionLoad } from "./controllers/store/authSlice";
 
 function ScrollToTop() {
@@ -32,6 +38,7 @@ function ScrollToTop() {
 
 function App() {
   const dispatch = useDispatch();
+
   useEffect(() => {
     let isSubsribed = true;
 
@@ -46,6 +53,15 @@ function App() {
     }
     return () => (isSubsribed = false);
   }, [dispatch]);
+
+  const [isLoggedIn,setIsLoggedIn] = useState(false);
+  store.subscribe(()=>{
+    const {isLoggedIn} = store.getState().authState;
+    setIsLoggedIn(isLoggedIn);
+  })
+
+  
+
   return (
     <div className="App">
       <Header />
@@ -67,7 +83,13 @@ function App() {
         <Route path="contact" element={<Contact />} />
         <Route path="about-us" element={<About />} />
         <Route path="fresh-coffee" element={<FreshCoffee />} />
-        <Route path="my-account" element={<Login />} />
+
+        <Route path="my-account" element={isLoggedIn ? <AccountDetails /> :<Login />}>
+          <Route index element={<AccountDetailsContainer />} />
+          <Route path="payment-methods" element={<PaymentMethodsContainer/>} />
+          <Route path="address" element={<AddressContainer/>} />
+          <Route path="orders" element={<OrdersContainer />} />
+        </Route>
 
         <Route path="product/:id" element={<ProductOrder />} />
 
