@@ -8,9 +8,13 @@ function FavouriteProducts() {
   const [thumbnails,setThumbnails] = useState([]);
   store.subscribe(()=>{
     const products = store.getState().productsState.products;
-    setThumbnails(products);
+    setThumbnails(products.slice(0,4));
   })
 
+  useEffect(()=>{
+    const products = store.getState().productsState.products;
+    setThumbnails(products.slice(0,4));
+  },[]);
   return (
     <section className='favourites'>
     <Typography variant="h3" gutterBottom>Favourite Products</Typography>

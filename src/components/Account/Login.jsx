@@ -3,9 +3,10 @@ import { Button, TextField, Typography } from "@mui/material";
 import "../../styles/components/Account/Login.scss";
 import axios from "axios";
 import { BASE_URI } from "../../lib/base_uri";
-import { login } from "../../controllers/store/authSlice";
+import { UserLogin, UserRegistration } from "../../controllers/store/reducers/authReducers";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { store } from "../../controllers/store/store";
 
 function Login() {
   const [loginUsername, setLoginUsername] = useState("");
@@ -13,8 +14,9 @@ function Login() {
   const [registerUsername, setRegisterUsername] = useState("");
   const [registerEmail, setRegisterEmail] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
+  const [loginErrors,setLoginErrors] = useState(null);
+  const [registerErrors,setRegisterErrors] = useState(null);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const isLoginFilled = () => {
     return loginUsername.length > 0 && loginPassword.length > 0;
   };
@@ -27,27 +29,11 @@ function Login() {
   };
 
   const submitLogin = () => {
-    if(registerUsername.length === 0 || registerEmail.length === 0 || registerPassword === 0) return;
-    axios.post(`${BASE_URI}/auth/login`, {
-        name: loginUsername,
-        password: loginPassword,
-      },{
-        withCredentials:true,
-      })
-      .then((data) => {
-        const {user} = data.data;
-        if(user) {
-          dispatch(login({user}));
-          navigate("/my-account");
-        }
-      setLoginUsername("");
-      setLoginPassword("");
-      })
-      .catch((err) => console.log(err));
-      
+    if(loginUsername.length === 0 || loginPassword.length === 0) return;
+    dispatch(UserLogin({username:loginUsername,password:loginPassword})); 
   };
   const submitRegister = () => {
-    if(registerUsername.length === 0 || registerEmail.length === 0 || registerPassword === 0) return;
+    if(registerUsername.length === 0 || registerEmail.length === 0 || registerPassword.length === 0) return;
     axios.post(`${BASE_URI}/auth/register`, {
         name: registerUsername,
         email: registerEmail,
@@ -58,16 +44,23 @@ function Login() {
       .then((data) => {
         const {user} = data.data;
         if(user) {
-        dispatch(login({user}));
-        navigate("/my-account");
+        dispatch(UserRegistration({username:registerUsername,email:registerEmail,password:registerPassword}));
         }
         setRegisterUsername("");
         setRegisterEmail("");
         setRegisterPassword("");
       })
-      .catch((err) => console.log(err));
+      .catch((err) =>{
+        const {data} = err.response;
+        if(data.message){
+          setRegisterErrors(data.message);
+        } 
+      });
   };
-
+  store.subscribe(()=>{
+    const loginErrorMessage = store.getState().authState.error.login;
+    setLoginErrors(loginErrorMessage);
+  })
   
   return (
     <section className="auth_container">
@@ -85,12 +78,14 @@ function Login() {
             value={loginUsername}
             onChange={(e) => setLoginUsername(e.target.value)}
           />
+          
           <TextField
             type="password"
             placeholder="Password"
             value={loginPassword}
             onChange={(e) => setLoginPassword(e.target.value)}
           />
+          <Typography color="red">{loginErrors}</Typography>
           <Button
             variant="contained"
             onClick={submitLogin}
@@ -123,6 +118,7 @@ function Login() {
             value={registerPassword}
             onChange={(e) => setRegisterPassword(e.target.value)}
           />
+          <Typography color="red">{registerErrors}</Typography>
           <Button
             variant="contained"
             onClick={submitRegister}

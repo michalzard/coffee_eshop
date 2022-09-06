@@ -3,32 +3,18 @@ import { Button, TextField, Typography } from "@mui/material";
 import "../../styles/components/Account/AccountDetails.scss";
 import { store } from "../../controllers/store/store";
 import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
-import axios from "axios";
-import { BASE_URI } from "../../lib/base_uri";
 import { useDispatch } from "react-redux";
-import { logout } from "../../controllers/store/authSlice";
 import { Outlet, useNavigate } from "react-router-dom";
+import { UserLogout } from "../../controllers/store/reducers/authReducers";
 
 
 function AccountDetails() {
-  // const [display, setDisplay] = useState("account-details");
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  
-  // const contentBasedOnDisplay = (d) => {
-  //   switch (d) {
-  //     case "account-details": return <AccoundDetailsContainer />;
-  //     case "payment-methods": return  <PaymentMethodsContainer />;
-  //     case "address": return  <AddressContainer />;
-  //     case "orders": return <OrdersContainer />;
-  //     default: return <AccoundDetailsContainer />;
-  //   }
-  // }
+
+
   const submigLogout=()=>{
-    axios.post(`${BASE_URI}/auth/logout`,{},{withCredentials:true}).then(data=>{
-      const {message} = data.data;
-      if(message) dispatch(logout());
-    })
+    dispatch(UserLogout());
   }
 
 
@@ -69,9 +55,9 @@ export function AccountDetailsContainer() {
     }
   }
 
-  const submitInfoUpdate=()=>{
-    // axios.post(`${BASE_URI}/update`)
-  }
+  // const submitInfoUpdate=()=>{
+  //   // axios.post(`${BASE_URI}/update`)
+  // }
   // const passwordMatch=(pw1,pw2)=>{
   //   return pw1 === pw2 && pw1.length>0 && pw2.length>0;
   // }

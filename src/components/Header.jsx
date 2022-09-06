@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Typography, useMediaQuery, Menu, MenuItem } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Typography, useMediaQuery, Menu, MenuItem, SwipeableDrawer } from "@mui/material";
 import { Link } from "react-router-dom";
 import "../styles/components/Header.scss";
 import { store } from "../controllers/store/store";
@@ -10,15 +10,19 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import LogoutIcon from '@mui/icons-material/Logout';
-import axios from "axios";
-import { BASE_URI } from "../lib/base_uri";
 import { useDispatch } from "react-redux";
-import { logout } from "../controllers/store/authSlice";
+import { fetchCart } from "../controllers/eccommerce/cart";
+import {ReactComponent as EmptyCartIcon} from "../assets/empty_cart.svg";
+import { Close } from "@mui/icons-material";
+import { UserLogout } from "../controllers/store/reducers/authReducers";
+
 
 function Header() {
   const isMobile = useMediaQuery("(max-width:800px)");
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [secondaryMenuAnchor,setSecondaryAnchor] = useState(null);
+  const [cartAnchor,setCartAnchor] = useState(null);
+
   const closeMenu = () => setMenuAnchor(null);
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -67,11 +71,9 @@ function Header() {
             </MenuItem>
                 </Link>
               {isLoggedIn ? (
-                <Link to="/cart">
             <MenuItem key={4} >
-                  <ShoppingCartIcon />
+                  <ShoppingCartIcon className="cartBtn" onClick={(e) => setCartAnchor(e.currentTarget)} />
             </MenuItem>
-                </Link>
               ) : null}
 
             <MenuItem key={5} onClick={(e) => setSecondaryAnchor(e.currentTarget)}>
@@ -83,6 +85,7 @@ function Header() {
               menuAnchor={secondaryMenuAnchor}
               closeMenu={()=>{setSecondaryAnchor(null)}}
             />
+          <Cart anchor={cartAnchor} setCartAnchor={setCartAnchor}/>
         </section>
       ) : (
         <section className="header_section">
@@ -103,9 +106,7 @@ function Header() {
               <Typography>Contact</Typography>
             </Link>
             {isLoggedIn ? (
-              <Link to="/cart">
-                <ShoppingCartIcon />
-              </Link>
+                <ShoppingCartIcon className="cartBtn" onClick={(e) => setCartAnchor(e.currentTarget)}/>
             ) : null}
 
             <section
@@ -120,6 +121,7 @@ function Header() {
               menuAnchor={menuAnchor}
               closeMenu={closeMenu}
             />
+            <Cart anchor={cartAnchor} setCartAnchor={setCartAnchor}/>
           </section>
         </section>
       )}
@@ -132,10 +134,7 @@ export default Header;
 function AccountMenu({ menuAnchor, closeMenu }) {
   const dispatch = useDispatch();
   const submigLogout=()=>{
-    axios.post(`${BASE_URI}/auth/logout`,{},{withCredentials:true}).then(data=>{
-      const {message} = data.data;
-      if(message) dispatch(logout());
-    })
+   dispatch(UserLogout());
   }
   return (
     <Menu
@@ -172,4 +171,46 @@ function AccountMenu({ menuAnchor, closeMenu }) {
      
     </Menu>
   );
+}
+
+function Cart({anchor , setCartAnchor}){
+  const [cart,setCart] = useState({});
+  //TODO: fetch only when logged in 
+  useEffect(()=>{
+  let isSubscribed = true;
+  async function loadCartData(){
+  const cart = await fetchCart();
+  console.log(cart);
+  if(isSubscribed) setCart(cart);//asyncthunk
+  }
+  loadCartData();
+  return ()=> isSubscribed = false;
+  },[]);
+
+  return(
+    <SwipeableDrawer
+    anchor={"right"}
+    open={Boolean(anchor)}
+    onClose={()=>setCartAnchor(null)}
+    onOpen={()=>setCartAnchor(anchor)}
+    >
+    <section className="cart-container">
+    {
+      cart.total_items > 0 ? <>here goes product list</>
+      : <EmptyCart setAnchor={setCartAnchor}/>
+    }
+    </section>
+    </SwipeableDrawer>
+  )
+}
+
+function EmptyCart({setAnchor}){
+  return(
+    <section className="cart-empty">
+    <Close className="closeIcon" onClick={()=>{setAnchor(null)}}/>
+    <EmptyCartIcon className="empty-icon"/>
+    <Typography variant="h5" gutterBottom>No products in cart.</Typography>
+    <Link to="/fresh-coffee"><Typography variant="h6" onClick={()=>{setAnchor(null)}}>Continue shopping</Typography></Link>
+    </section>
+  )
 }

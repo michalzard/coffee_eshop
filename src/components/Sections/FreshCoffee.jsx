@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../../styles/components/Sections/FreshCoffee.scss";
 import {
   MenuItem,
@@ -8,9 +8,22 @@ import {
   FormControl,
 } from "@mui/material";
 import ProductThumbnail from "../Products/ProductThumbnail";
+import { store } from "../../controllers/store/store";
 
 function FreshCoffee() {
   const [prepValue, setPrepValue] = useState("");
+  const [thumbnails, setThumbnails] = useState([]);
+
+  store.subscribe(() => {
+    const products = store.getState().productsState.products;
+    setThumbnails(products);
+  });
+
+  useEffect(() => {
+    const products = store.getState().productsState.products;
+    setThumbnails(products);
+  }, []);
+
   return (
     <section className="fresh-selection">
       <Typography variant="h2">Fresh Coffee</Typography>
@@ -58,15 +71,16 @@ function FreshCoffee() {
         </div>
       </section>
       <section className="product-list">
-        <ProductThumbnail />
-        <ProductThumbnail />
-        <ProductThumbnail />
-        <ProductThumbnail />
-        <ProductThumbnail />
-        <ProductThumbnail />
-        <ProductThumbnail />
-        <ProductThumbnail />
-        <ProductThumbnail />
+       {thumbnails.map((thumbnail) => {
+          return (
+            <ProductThumbnail
+              key={thumbnail.id}
+              name={thumbnail.name}
+              img={thumbnail.image.url}
+              pricing={thumbnail.price.formatted_with_symbol}
+            />
+          );
+        })}
       </section>
     </section>
   );

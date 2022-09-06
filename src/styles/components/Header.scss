@@ -4,9 +4,10 @@ header {
   animation: breathe 4s infinite;
   padding: 20px;
   color: white;
-  position: sticky;
+  position: fixed;
   top: 0;
   left: 0;
+  right: 0;
   .header_section {
     width: 100%;
     display: flex;
@@ -40,7 +41,7 @@ header {
     box-shadow: 0px 1px 15px rgb(0, 0, 0, 1);
   }
   50% {
-    box-shadow: 0px 1px 15px rgb(0, 0, 0, 0.7);
+    box-shadow: 0px 1px 15px rgb(0, 0, 0, 0.6);
   }
   100% {
     box-shadow: 0px 1px 15px rgb(0, 0, 0, 1);
@@ -60,5 +61,35 @@ header {
   }
   svg {
     margin-right: 10px;
+  }
+}
+
+.header_section {
+  .cartBtn {
+    margin: 0px 10px;
+    cursor: pointer;
+  }
+}
+
+.cart-container,
+.cart-empty {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  @media (max-width:800px) {
+    width:300px;
+  }
+  align-items: center;
+  .closeIcon {
+    align-self: flex-end;
+  }
+  .empty-icon {
+    width: inherit;
+    height: inherit;
+    margin: 30px;
+  }
+  a {
+    text-decoration: none;
+    color: $primary;
   }
 }
