@@ -3,7 +3,7 @@ import axios from "axios";
 import { BASE_URI } from "../../../lib/base_uri";
 export const LoadSession = createAsyncThunk(
   "Auth/SessionLoad",
-  async (data, { rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     return await axios
       .get(`${BASE_URI}/auth/session`, { withCredentials: true })
       .then((data) => {
@@ -39,7 +39,7 @@ export const UserLogin = createAsyncThunk(
 
 export const UserLogout = createAsyncThunk(
   "Auth/Logout",
-  async (data, { rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     return await axios
       .post(`${BASE_URI}/auth/logout`, {}, { withCredentials: true })
       .then((data) => {
@@ -55,11 +55,14 @@ export const UserLogout = createAsyncThunk(
 
 export const UserRegistration = createAsyncThunk(
   "Auth/Register",
-  async ({ username,email,password }, { rejectWithValue }) => {
-    return await axios.post(`${BASE_URI}/auth/login`,
+  async ({ username, email, password }, { rejectWithValue }) => {
+    return await axios
+      .post(
+        `${BASE_URI}/auth/register`,
         { name: username, email, password },
         { withCredentials: true }
-      ).then((data) => {
+      )
+      .then((data) => {
         const { user } = data.data;
         return user;
       })

@@ -8,19 +8,19 @@ const productSlice = createSlice({
     loading: false,
     error: "",
   },
-  extraReducers: (builder) => {
+  extraReducers: {
     //Product/All
-    builder.addCase(getAllProducts.pending, (state) => {
+    [getAllProducts.pending]: (state) => {
       state.loading = true;
-    });
-    builder.addCase(getAllProducts.fulfilled, (state, action) => {
+    },
+    [getAllProducts.fulfilled]: (state, action) => {
       state.loading = false;
-      state.products.push(...action.payload);//iterate over array received in payload
-    });
-    builder.addCase(getAllProducts.rejected, (state, action) => {
+      state.products.push(...action.payload); //iterate over array received in payload
+    },
+    [getAllProducts.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
-    });
+    },
   },
 });
 
