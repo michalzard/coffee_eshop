@@ -29,9 +29,11 @@ const hashedPw=await bcrypt.hashSync(password,12);
 const registeredUser=new User({email,displayName:name,tag:name,password:hashedPw});
 if(registeredUser){
 const user=await registeredUser.save();
+if(user){
 req.session.user_id=registeredUser._id;
 res.cookie("session_id",req.session.id,{httpOnly:true,maxAge: 1000 * 60 * 60 * 24, /*1 day*/ });
 res.status(200).send({message:"User registered successfully",user});
+}else res.status(404).send({message:"Registration error"});
 }
 }
 }else{

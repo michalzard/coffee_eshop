@@ -1,5 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { LoadSession, UserLogin, UserLogout } from "./reducers/authReducers";
+import {
+  LoadSession,
+  UserLogin,
+  UserLogout,
+  UserRegistration,
+} from "./reducers/authReducers";
 
 const authSlice = createSlice({
   name: "Auth",
@@ -14,7 +19,7 @@ const authSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    //session
+    //Auth / Session
     builder.addCase(LoadSession.pending, (state) => {
       state.loading = true;
     });
@@ -31,7 +36,7 @@ const authSlice = createSlice({
       state.error.session = action.payload;
     });
 
-    //login
+    //Auth / Login
     builder.addCase(UserLogin.pending, (state) => {
       state.loading = true;
     });
@@ -48,7 +53,24 @@ const authSlice = createSlice({
       state.user = null;
     });
 
-    //logout
+    //Auth / Register
+    builder.addCase(UserRegistration.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(UserRegistration.fulfilled, (state, action) => {
+      state.loading = false;
+      state.isLoggedIn = true;
+      state.error.register = "";
+      state.user = action.payload;
+    });
+    builder.addCase(UserRegistration.rejected, (state, action) => {
+      state.user = null;
+      state.isLoggedIn = false;
+      state.loading = false;
+      state.error.register = action.payload;
+    });
+
+    //Auth / Logout
     builder.addCase(UserLogout.pending, (state) => {
       state.loading = true;
     });
