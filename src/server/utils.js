@@ -16,10 +16,12 @@ async function checkForSession(sessionId){
 async function deleteSession(sessionId){
   return await mongoose.connection.db.collection("sessions").findOneAndDelete({_id:sessionId});
 }
-
+const parseCookie = str => str.split(';').map(v => v.split('=')).reduce((acc, v) => { acc[decodeURIComponent(v[0].trim())] = decodeURIComponent(v[1].trim()); return acc;}, {});
 function getSessionCookie(cookie){
-  if(typeof cookie === "string") return cookie.split("session_id=")[1];
-  return;
+  if(typeof cookie === "string"){
+  const parsedCookie = parseCookie(cookie);
+  if(parsedCookie.session_id) return parsedCookie.session_id;
+  }else return null;
 }
 
 module.exports = {
