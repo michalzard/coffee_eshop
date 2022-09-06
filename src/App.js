@@ -21,9 +21,7 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    let isSubsribed = true;
-    if (isSubsribed) dispatch(LoadSession()); 
-    return () => { isSubsribed = false };
+    dispatch(LoadSession()); 
   }, [dispatch]);
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);

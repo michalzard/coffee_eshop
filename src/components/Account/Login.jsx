@@ -1,11 +1,8 @@
 import React, { useState } from "react";
 import { Button, TextField, Typography } from "@mui/material";
 import "../../styles/components/Account/Login.scss";
-import axios from "axios";
-import { BASE_URI } from "../../lib/base_uri";
 import { UserLogin, UserRegistration } from "../../controllers/store/reducers/authReducers";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { store } from "../../controllers/store/store";
 
 function Login() {
@@ -34,32 +31,12 @@ function Login() {
   };
   const submitRegister = () => {
     if(registerUsername.length === 0 || registerEmail.length === 0 || registerPassword.length === 0) return;
-    axios.post(`${BASE_URI}/auth/register`, {
-        name: registerUsername,
-        email: registerEmail,
-        password: registerPassword,
-      },{
-        withCredentials:true,
-      })
-      .then((data) => {
-        const {user} = data.data;
-        if(user) {
-        dispatch(UserRegistration({username:registerUsername,email:registerEmail,password:registerPassword}));
-        }
-        setRegisterUsername("");
-        setRegisterEmail("");
-        setRegisterPassword("");
-      })
-      .catch((err) =>{
-        const {data} = err.response;
-        if(data.message){
-          setRegisterErrors(data.message);
-        } 
-      });
+    dispatch(UserRegistration({username:registerUsername,email:registerEmail,password:registerPassword}));
   };
   store.subscribe(()=>{
-    const loginErrorMessage = store.getState().authState.error.login;
-    setLoginErrors(loginErrorMessage);
+    const {login,register} = store.getState().authState.error;
+    setLoginErrors(login);
+    setRegisterErrors(register);
   })
   
   return (
