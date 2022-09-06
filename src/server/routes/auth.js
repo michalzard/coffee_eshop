@@ -51,13 +51,12 @@ if(foundUser){
 req.session.user_id=foundUser._id;
 req.session.save();
 const validatedPw=await bcrypt.compare(password,foundUser.password);
-res.cookie("session_id",req.session.id,{httpOnly:true,maxAge: 1000 * 60 * 60 * 24, /*1 day*/ });
-
 if(validatedPw) {
     //remove password field from response
+    res.cookie("session_id",req.session.id,{httpOnly:true,maxAge: 1000 * 60 * 60 * 24, /*1 day*/ });
     res.status(200).send({message:"Login successful",user:foundUser});
 }
-else res.status(200).send({message:"Username or password you entered is incorrect"});  
+else res.status(400).send({message:"Username or password you entered is incorrect"});  
 // }else res.status(401).send({message:"Unauthorized"});  
 }else res.status(400).send({message:"Username or password you entered is incorrect"});  
 }catch(err){
@@ -93,7 +92,8 @@ const foundSession=await checkForSession(id);
 if(foundSession){
 const{user_id}=foundSession.session;
 const user = await User.findById(user_id,{password:0});
-res.status(200).send({message:"Session found",user});
+if(user)res.status(200).send({message:"Session found",user});
+else res.status(404).send({message:"User session expired"});
 }else{
     res.status(404).send({message:"User session expired"});
 }
