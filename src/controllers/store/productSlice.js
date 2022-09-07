@@ -5,8 +5,14 @@ const productSlice = createSlice({
   name: "Products",
   initialState: {
     products: [],
+    selectedId: null,
     loading: false,
     error: "",
+  },
+  reducers: {
+    selectProduct: (state, action) => {
+      state.selectedId = action.payload;
+    },
   },
   extraReducers: {
     //Product/All
@@ -23,5 +29,7 @@ const productSlice = createSlice({
     },
   },
 });
+
+export const { selectProduct } = productSlice.actions;
 
 export default productSlice.reducer;
