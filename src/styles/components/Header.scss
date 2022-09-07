@@ -8,6 +8,7 @@ header {
   top: 0;
   left: 0;
   right: 0;
+  height: 25px;
   .header_section {
     width: 100%;
     display: flex;
@@ -33,6 +34,11 @@ header {
   z-index: 10;
   .coffee {
     color: $primary;
+  }
+  .cartBadge {
+    span {
+      background-color: $primary;
+    }
   }
 }
 
@@ -76,8 +82,8 @@ header {
   display: flex;
   flex-direction: column;
   width: 400px;
-  @media (max-width:800px) {
-    width:300px;
+  @media (max-width: 800px) {
+    width: 300px;
   }
   align-items: center;
   .closeIcon {

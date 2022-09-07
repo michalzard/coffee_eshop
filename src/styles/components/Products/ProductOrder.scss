@@ -2,9 +2,33 @@
 
 .productOrder {
   display: flex;
-  margin-top:100px;
   .imgs {
+    display:flex;
     flex: 1;
+    flex-direction: column;
+    padding:20px;
+    .mainImg{
+      width:  100%;
+      height: 100%;
+      object-fit:cover;
+    }
+    .additionalImgs{
+      padding:20px;
+      margin-top:20px;
+      height: 100px;
+      .altImg{
+        width: 100px;
+        height: 100px;
+        object-fit:scale-down;
+        margin:0px 20px;
+        //onhover border
+        //open dialog window
+        border:1px solid transparent;
+      }
+      .altImg:hover{
+        border:1px solid gray;
+      }
+    }
   }
   .info {
     flex: 1;

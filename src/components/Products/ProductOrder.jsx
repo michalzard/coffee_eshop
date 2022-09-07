@@ -8,46 +8,92 @@ import {
   FormControl,
   TextField,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../../styles/components/Products/ProductOrder.scss";
 import ShareIcon from "@mui/icons-material/Share";
 import ProductReviews from "./ProductReviews";
-
+import { store } from "../../controllers/store/store";
+import { selectProduct } from "../../controllers/store/productSlice";
+import { useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../controllers/eccommerce/cart";
 
 function ProductOrder() {
+  const { id } = useParams();
+  const dispatch = useDispatch();
   const unlockScroll = { disableScrollLock: true };
   const [roastingValue, setRoastingValue] = useState("");
   const [packageSizeValue, setPackageSizeValue] = useState("");
   const [grindingValue, setGrindingValue] = useState("");
 
+  const [isLoading, setLoading] = useState(false);
+  const [currentProduct, setCurrentProduct] = useState(null);
+  const [numberOfItems, setNumberOfItems] = useState(1);
   const clearValues = () => {
     setRoastingValue("");
     setPackageSizeValue("");
     setGrindingValue("");
   };
+
+  useEffect(() => {
+    const { products, selectedId } = store.getState().productsState;
+    if (!selectedId) {
+      dispatch(selectProduct(id));
+      //store subscription than handles product array on emmited event
+    } else {
+      const productById = products.find((product) => product.id === selectedId);
+      setCurrentProduct(productById);
+    }
+  }, [dispatch,id]);
+
+  store.subscribe(() => {
+    const { products, selectedId, loading } = store.getState().productsState;
+    setLoading(loading);
+    if (products.length > 0 && selectedId) {
+      const productById = products.find((product) => product.id === selectedId);
+      setCurrentProduct(productById);
+    }
+  });
+
+  const addProductToCart=()=>{
+    addToCart(id,numberOfItems);
+  }
+
   return (
     <>
       <section className="productOrder">
         <div className="imgs">
-          <img src="broken" className="mainImg" alt="example"></img>
+          <img
+            src={currentProduct ? currentProduct.image.url : null}
+            className="mainImg"
+            alt="Product"
+          ></img>
           <div className="additionalImgs">
-            <img src="broken" className="altImg" alt="example"></img>
-            <img src="broken" className="altImg" alt="example"></img>
-            <img src="broken" className="altImg" alt="example"></img>
-            <img src="broken" className="altImg" alt="example"></img>
-            <img src="broken" className="altImg" alt="example"></img>
+            {currentProduct
+              ? currentProduct.assets.map((asset,i) => {
+                  return (
+                    <img
+                      key={i}
+                      src={asset.url}
+                      className="altImg"
+                      alt={asset.permalink}
+                    ></img>
+                  );
+                })
+              : null}
           </div>
         </div>
         <div className="info">
           <section className="title">
-            <Typography variant="h3">Coffee Name</Typography> <ShareIcon />
+            <Typography variant="h3">
+              {currentProduct ? currentProduct.name : "Coffee Name"}
+            </Typography>{" "}
+            <ShareIcon />
           </section>
           <Rating className="rating" readOnly />
           <Typography gutterBottom color="gray">
-            Product DescriptionProduct DescriptionProduct DescriptionProduct
-            DescriptionProduct DescriptionProduct DescriptionProduct Description
-            Product DescriptionProduct DescriptionProduct DescriptionProduct
-            DescriptionProduct DescriptionProduct Description
+          {currentProduct  ? currentProduct.description.length>0 ? currentProduct.description : "This product has no description." : null}
+
           </Typography>
           <section className="specifications">
             <section className="roasting">
@@ -106,14 +152,27 @@ function ProductOrder() {
                 </Select>
               </FormControl>
             </section>
-            <Typography className="removeFields" onClick={clearValues} gutterBottom>
+            <Typography
+              className="removeFields"
+              onClick={clearValues}
+              gutterBottom
+            >
               Clear options
             </Typography>
           </section>
 
           <section className="pricing">
             <Typography className="price" variant="h5" gutterBottom>
-              55€ with VAT
+              {isLoading ? (
+                "Loading ..."
+              ) : (
+                <>
+                  {currentProduct
+                    ? currentProduct.price.raw * numberOfItems
+                    : "7.77"}
+                  € with VAT
+                </>
+              )}
             </Typography>
             <div>
               <TextField
@@ -122,17 +181,29 @@ function ProductOrder() {
                 className="amount"
                 size="small"
                 defaultValue={1}
-                inputProps={{ maxLength:3,inputMode: "numeric", pattern: "[0-9]*",min:1,max:100}}
-                onInput={(e)=>{
-                  e.target.value = Math.max(0,parseInt(e.target.value)).toString().slice(0,3);//https://github.com/mui/material-ui/issues/10934
+                inputProps={{
+                  maxLength: 3,
+                  inputMode: "numeric",
+                  pattern: "[0-9]*",
+                  min: 1,
+                  max: 100,
                 }}
-              >
-              </TextField>
+                onInput={(e) => {
+                  e.target.value = Math.max(0, parseInt(e.target.value))
+                    .toString()
+                    .slice(0, 3); //https://github.com/mui/material-ui/issues/10934
+                }}
+                onChange={(e) => {
+                  setNumberOfItems(e.target.value);
+                }}
+              ></TextField>
               <Button
                 className="buyBtn"
                 variant="contained"
                 color="success"
                 size="large"
+                disabled={isLoading}
+                onClick={addProductToCart}
               >
                 Add to cart
               </Button>
@@ -140,7 +211,7 @@ function ProductOrder() {
           </section>
         </div>
       </section>
-    <ProductReviews/>
+      <ProductReviews />
     </>
   );
 }
