@@ -20,7 +20,7 @@ function FavouriteProducts() {
     <Typography variant="h3" gutterBottom>Favourite Products</Typography>
     <section className="product-list">
       {
-        thumbnails.map(thumbnail=>{return  <ProductThumbnail key={thumbnail.id} name={thumbnail.name} img={thumbnail.image.url} pricing={thumbnail.price.formatted_with_symbol}/>})
+        thumbnails.map(thumbnail=>{return  <ProductThumbnail id={thumbnail.id} key={thumbnail.id} name={thumbnail.name} img={thumbnail.image.url} pricing={thumbnail.price.formatted_with_symbol}/>})
       }
    
     {/* <ProductThumbnail/>

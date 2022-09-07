@@ -24,6 +24,7 @@ function LatestProducts() {
         {thumbnails.map((thumbnail) => {
           return (
             <ProductThumbnail
+              id={thumbnail.id}
               key={thumbnail.id}
               name={thumbnail.name}
               img={thumbnail.image.url}
