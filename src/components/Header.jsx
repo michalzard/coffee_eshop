@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Typography,
   useMediaQuery,
   Menu,
   MenuItem,
-  SwipeableDrawer,
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import "../styles/components/Header.scss";
@@ -17,11 +16,9 @@ import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useDispatch } from "react-redux";
-import { ReactComponent as EmptyCartIcon } from "../assets/empty_cart.svg";
-import { Close } from "@mui/icons-material";
 import { UserLogout } from "../controllers/store/reducers/authReducers";
-import { CartRetrieve } from "../controllers/store/reducers/cartReducers";
 import Badge from "@mui/material/Badge";
+import CartContainer from "./Cart/CartContainer";
 
 function Header() {
   const isMobile = useMediaQuery("(max-width:800px)");
@@ -30,7 +27,6 @@ function Header() {
   const [cartAnchor, setCartAnchor] = useState(null);
   const closeMenu = () => setMenuAnchor(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const dispatch = useDispatch();
 
   const [cart, setCart] = useState(0);
 
@@ -41,9 +37,6 @@ function Header() {
     setIsLoggedIn(isLoggedIn);
   });
 
-  useEffect(() => {
-    dispatch(CartRetrieve()); //Load initial cart state
-  }, [dispatch]);
   return (
     <header>
       {isMobile ? (
@@ -108,7 +101,7 @@ function Header() {
               setSecondaryAnchor(null);
             }}
           />
-          <Cart
+          <CartContainer
             anchor={cartAnchor}
             cartObject={cart}
             setCartAnchor={setCartAnchor}
@@ -133,7 +126,7 @@ function Header() {
               <Typography>Contact</Typography>
             </Link>
             {isLoggedIn ? (
-              <Badge badgeContent={cart ? cart.total_items : null} className="cartBadge" max={99}>
+              <Badge badgeContent={cart ? cart.total_items : 0} className="cartBadge" max={99}>
                 <ShoppingCartIcon
                   className="cartBtn"
                   onClick={(e) => setCartAnchor(e.currentTarget)}
@@ -151,7 +144,7 @@ function Header() {
             {/* DESKTOP MENU */}
             <AccountMenu menuAnchor={menuAnchor} closeMenu={closeMenu} />
             {cartAnchor ? (
-              <Cart
+              <CartContainer
                 anchor={cartAnchor}
                 cartObject={cart}
                 setCartAnchor={setCartAnchor}
@@ -210,53 +203,5 @@ function AccountMenu({ menuAnchor, closeMenu }) {
         </Link>
       </MenuItem>
     </Menu>
-  );
-}
-
-function Cart({ anchor, setCartAnchor, cartObject }) {
-  return (
-    <SwipeableDrawer
-      anchor={"right"}
-      open={Boolean(anchor)}
-      onClose={() => setCartAnchor(null)}
-      onOpen={() => setCartAnchor(anchor)}
-    >
-      <section className="cart-container">
-        <Close
-          className="closeIcon"
-          onClick={() => {
-            setCartAnchor(null);
-          }}
-        />
-        {cartObject ? (
-          cartObject.items.length > 0 ? (
-            <Typography>Product List</Typography>
-          ) : (
-            <EmptyCart setAnchor={setCartAnchor} />
-          )
-        ) : null}
-      </section>
-    </SwipeableDrawer>
-  );
-}
-
-function EmptyCart({ setAnchor }) {
-  return (
-    <section className="cart-empty">
-      <EmptyCartIcon className="empty-icon" />
-      <Typography variant="h5" gutterBottom>
-        No products in cart.
-      </Typography>
-      <Link to="/fresh-coffee">
-        <Typography
-          variant="h6"
-          onClick={() => {
-            setAnchor(null);
-          }}
-        >
-          Continue shopping
-        </Typography>
-      </Link>
-    </section>
   );
 }

@@ -76,26 +76,3 @@ header {
     cursor: pointer;
   }
 }
-
-.cart-container,
-.cart-empty {
-  display: flex;
-  flex-direction: column;
-  width: 400px;
-  @media (max-width: 800px) {
-    width: 300px;
-  }
-  align-items: center;
-  .closeIcon {
-    align-self: flex-end;
-  }
-  .empty-icon {
-    width: inherit;
-    height: inherit;
-    margin: 30px;
-  }
-  a {
-    text-decoration: none;
-    color: $primary;
-  }
-}
