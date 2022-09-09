@@ -17,6 +17,7 @@ import { selectProduct } from "../../controllers/store/productSlice";
 import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../controllers/eccommerce/cart";
+import { CartAdd } from "../../controllers/store/reducers/cartReducers";
 
 function ProductOrder() {
   const { id } = useParams();
@@ -56,7 +57,7 @@ function ProductOrder() {
   });
 
   const addProductToCart=()=>{
-    addToCart(id,numberOfItems);
+    dispatch(CartAdd({productId:id,quantity:numberOfItems}));
   }
 
   return (

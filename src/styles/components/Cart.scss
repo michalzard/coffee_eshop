@@ -1,0 +1,75 @@
+@import "../Theme.scss";
+
+.cart-container,
+.cart-empty {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  height: 100vh;
+  @media (max-width: 800px) {
+    width: 300px;
+  }
+  align-items: center;
+  .closeIcon {
+    align-self: flex-end;
+    cursor: pointer;
+  }
+  .empty-icon {
+    margin: 30px;
+  }
+  a {
+    text-decoration: none;
+    color: $primary;
+  }
+  .checkoutBtn {
+    width: 50%;
+    background-color: $primary !important;
+    margin: 10px 0;
+  }
+}
+
+@mixin summary() {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: center;
+}
+
+.cart-products {
+  display: flex;
+  flex-direction: column;
+  width: inherit;
+  overflow-x: hidden;
+  margin-bottom: 30px;
+}
+.cart-product-summary {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  border-bottom: 2px dotted $primary;
+
+  ._summary {
+    display: flex;
+    width: 100%;
+  }
+  .summary-left {
+    @include summary();
+    align-items: center;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    margin-right: 30px;
+  }
+  .summary-right {
+    @include summary();
+  }
+  .removeProduct {
+    align-self: flex-end;
+    cursor: pointer;
+  }
+  .removeProduct:hover {
+    color: $primary;
+  }
+}
