@@ -5,6 +5,7 @@ import "../styles/components/Footer.scss";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import InstagramIcon from "@mui/icons-material/Instagram";
+import Logo from "../assets/eshop-logo-dark.png";
 
 function Footer() {
   return (
@@ -44,7 +45,7 @@ function Footer() {
           <TwitterIcon />
           <InstagramIcon />
         </div>
-        <Typography>LOGO HERE</Typography>
+        <img src={Logo} className="logo" alt="Logo"/>
       </div>
     <section className="copyright">
     <Typography>Copyright &copy; 2022 - {new Date().getFullYear()} cofferia.com 

@@ -1,18 +1,20 @@
 import { useEffect, useState } from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import "../src/styles/App.scss";
 import {Header,Footer,Carousel,DeliverySection,AboutUsSection,LatestProducts,FavouriteProducts,Contact,About,FreshCoffee,ProductOrder,Login,NotFound,AccountDetails,AccountDetailsContainer,PaymentMethodsContainer,AddressContainer,OrdersContainer} from "../src/components/index";
 import { useDispatch } from "react-redux";
 import { store } from "./controllers/store/store";
 import { LoadSession } from "./controllers/store/reducers/authReducers";
 import { getAllProducts } from "./controllers/store/reducers/productReducers";
+import CheckoutSection from "./components/Sections/CheckoutSection";
 
 
 function ScrollToTop() {
   //on every pathname change scroll to top to display important things
   const { pathname } = useLocation();
   useEffect(() => {
-    document.body.scrollTo({ top: 0, left: 0 });
+    window.scrollTo({ top: 0, left: 0 })
+    // document.body.scrollTo({ top: 0, left: 0 });
   }, [pathname]);
   return null;
 }
@@ -70,6 +72,7 @@ function App() {
           <Route path="address" element={<AddressContainer />} />
           <Route path="orders" element={<OrdersContainer />} />
         </Route>
+        <Route path="/checkout" element={<CheckoutSection isLoggedIn={isLoggedIn} />}/>
 
         <Route path="product/:id" element={<ProductOrder />} />
 

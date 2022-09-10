@@ -1,0 +1,14 @@
+.checkout-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  .checkout{
+    display: flex;
+  }
+  .billing-info {
+    flex: 1;
+  }
+  .order-info {
+    flex: 1;
+  }
+}

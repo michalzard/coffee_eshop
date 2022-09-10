@@ -1,10 +1,5 @@
 import React, { useState } from "react";
-import {
-  Typography,
-  useMediaQuery,
-  Menu,
-  MenuItem,
-} from "@mui/material";
+import { Typography, useMediaQuery, Menu, MenuItem } from "@mui/material";
 import { Link } from "react-router-dom";
 import "../styles/components/Header.scss";
 import { store } from "../controllers/store/store";
@@ -15,10 +10,12 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import LogoutIcon from "@mui/icons-material/Logout";
+import LoginIcon from '@mui/icons-material/Login';
 import { useDispatch } from "react-redux";
 import { UserLogout } from "../controllers/store/reducers/authReducers";
 import Badge from "@mui/material/Badge";
 import CartContainer from "./Cart/CartContainer";
+import Logo from "../assets/eshop-logo.png";
 
 function Header() {
   const isMobile = useMediaQuery("(max-width:800px)");
@@ -41,9 +38,7 @@ function Header() {
     <header>
       {isMobile ? (
         <section className="header_section">
-          <Link to="/">
-            <Typography>Logo</Typography>
-          </Link>
+          <img src={Logo} className="logo" alt="Logo" />
 
           <MenuIcon
             onClick={(e) => {
@@ -78,7 +73,11 @@ function Header() {
             </Link>
             {isLoggedIn ? (
               <MenuItem key={4}>
-                <Badge badgeContent={cart ? cart.total_items : 0} color="primary" max={99}>
+                <Badge
+                  badgeContent={cart ? cart.total_items : 0}
+                  color="primary"
+                  max={99}
+                >
                   <ShoppingCartIcon
                     className="cartBtn"
                     onClick={(e) => setCartAnchor(e.currentTarget)}
@@ -109,7 +108,7 @@ function Header() {
         </section>
       ) : (
         <section className="header_section">
-          <Typography>Logo</Typography>
+          <img src={Logo} className="logo" alt="Logo" />
 
           <section className="h_links">
             <Link to="/">
@@ -126,7 +125,11 @@ function Header() {
               <Typography>Contact</Typography>
             </Link>
             {isLoggedIn ? (
-              <Badge badgeContent={cart ? cart.total_items : 0} className="cartBadge" max={99}>
+              <Badge
+                badgeContent={cart ? cart.total_items : 0}
+                className="cartBadge"
+                max={99}
+              >
                 <ShoppingCartIcon
                   className="cartBtn"
                   onClick={(e) => setCartAnchor(e.currentTarget)}
@@ -148,6 +151,7 @@ function Header() {
                 anchor={cartAnchor}
                 cartObject={cart}
                 setCartAnchor={setCartAnchor}
+                isLoggedIn={isLoggedIn}
               />
             ) : null}
           </section>
@@ -159,7 +163,7 @@ function Header() {
 
 export default Header;
 
-function AccountMenu({ menuAnchor, closeMenu }) {
+function AccountMenu({ menuAnchor, closeMenu , isLoggedIn }) {
   const dispatch = useDispatch();
   const submigLogout = () => {
     dispatch(UserLogout());
@@ -190,7 +194,9 @@ function AccountMenu({ menuAnchor, closeMenu }) {
           Orders
         </Link>
       </MenuItem>
-      <MenuItem
+      {
+        isLoggedIn ?
+        <MenuItem
         key={3}
         onClick={() => {
           submigLogout();
@@ -202,6 +208,21 @@ function AccountMenu({ menuAnchor, closeMenu }) {
           Logout
         </Link>
       </MenuItem>
+      : 
+      <MenuItem
+        key={3}
+        onClick={() => {
+          closeMenu();
+        }}
+      >
+        <Link to="/my-account">
+          <LoginIcon />
+          Login
+        </Link>
+      </MenuItem>
+      }
+      
     </Menu>
   );
 }
+//TODO: REFACTOR

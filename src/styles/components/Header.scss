@@ -2,23 +2,29 @@
 header {
   background: url("../../assets/coffee-slider.jpg") round no-repeat fixed;
   animation: breathe 4s infinite;
-  padding: 20px;
+  padding:0 10px;
   color: white;
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  height: 25px;
+  height: 80px;
   .header_section {
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
-
+    height: inherit;
+    .logo{
+      height: inherit;
+    }
     .h_links {
       display: flex;
       align-items: center;
       justify-content: center;
+      span {
+        margin-right: 5px;
+      }
     }
     a,
     .account-btn {

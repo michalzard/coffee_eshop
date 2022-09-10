@@ -5,8 +5,9 @@ body {
   margin: 0;
   padding: 0;
 }
+
 body {
   //extra space on top since header is fixed
-  margin-top: 35px;
-  padding-top: 30px;
+  margin-top: 80px;
+  overflow-x: hidden;
 }

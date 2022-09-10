@@ -5,7 +5,6 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import InstagramIcon from "@mui/icons-material/Instagram";
 
-
 function Contact() {
 return (
 <section className="contact">
@@ -30,7 +29,6 @@ return (
       <TwitterIcon />
       <InstagramIcon />
     </div>
-    <Typography>LOGO HERE</Typography>
   </div>
 
 </section>

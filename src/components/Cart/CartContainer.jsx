@@ -1,6 +1,6 @@
 import React from "react";
 import { Close } from "@mui/icons-material";
-import { Button, SwipeableDrawer, Typography } from "@mui/material";
+import { Button, Drawer , Typography } from "@mui/material";
 import CartProducts from "./CartProducts";
 import EmptyCart from "./Empty";
 import "../../styles/components/Cart.scss";
@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 function CartContainer({ anchor, setCartAnchor, cartObject }) {
   const navigate=useNavigate();
   return (
-    <SwipeableDrawer
+    <Drawer
       anchor={"right"}
       open={Boolean(anchor)}
       onClose={() => setCartAnchor(null)}
@@ -33,7 +33,7 @@ function CartContainer({ anchor, setCartAnchor, cartObject }) {
         : <EmptyCart setAnchor={setCartAnchor} />
         : null}
       </section>
-    </SwipeableDrawer>
+    </Drawer>
   );
 }
 

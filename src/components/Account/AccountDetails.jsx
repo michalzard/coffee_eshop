@@ -6,12 +6,12 @@ import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
 import { useDispatch } from "react-redux";
 import { Outlet, useNavigate } from "react-router-dom";
 import { UserLogout } from "../../controllers/store/reducers/authReducers";
+import AddressForm from "../Forms/AddressForm";
 
 
 function AccountDetails() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
 
   const submigLogout=()=>{
     dispatch(UserLogout());
@@ -114,10 +114,7 @@ export function AddressContainer() {
     <section className="address-containter">
       <Typography variant="h4">ADDRESS</Typography>
       <Typography>Delivery Address</Typography>
-      <TextField label="Country/Region" />
-      <TextField label="Street" />
-      <TextField label="Zipcode" />
-      <TextField label="Town" />
+      <AddressForm/>
       <Button variant="contained">Save changes</Button>
       
     </section>
