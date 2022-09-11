@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Routes, Route, useLocation, Navigate } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import "../src/styles/App.scss";
 import {Header,Footer,Carousel,DeliverySection,AboutUsSection,LatestProducts,FavouriteProducts,Contact,About,FreshCoffee,ProductOrder,Login,NotFound,AccountDetails,AccountDetailsContainer,PaymentMethodsContainer,AddressContainer,OrdersContainer} from "../src/components/index";
 import { useDispatch } from "react-redux";
