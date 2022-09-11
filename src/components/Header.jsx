@@ -99,6 +99,8 @@ function Header() {
             closeMenu={() => {
               setSecondaryAnchor(null);
             }}
+            isLoggedIn={isLoggedIn}
+
           />
           <CartContainer
             anchor={cartAnchor}
@@ -145,15 +147,14 @@ function Header() {
               <ArrowDropDownIcon />
             </section>
             {/* DESKTOP MENU */}
-            <AccountMenu menuAnchor={menuAnchor} closeMenu={closeMenu} />
-            {cartAnchor ? (
+            <AccountMenu menuAnchor={menuAnchor} closeMenu={closeMenu} isLoggedIn={isLoggedIn}/>
+            {cartAnchor ? 
               <CartContainer
                 anchor={cartAnchor}
                 cartObject={cart}
                 setCartAnchor={setCartAnchor}
-                isLoggedIn={isLoggedIn}
               />
-            ) : null}
+             : null}
           </section>
         </section>
       )}
