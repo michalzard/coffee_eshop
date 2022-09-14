@@ -39,6 +39,7 @@ const corsOptions = {
   credentials: true, // This is important.
   origin: (origin, callback) => {
     if (whitelist.includes(origin)) return callback(null, true);
+    else return callback(null,false);
   },
 };
 app.use(cors(corsOptions));
@@ -48,8 +49,10 @@ app.use(express.json());
 // app.use(express.urlencoded({ extended: true }));
 
 const authRoute = require("./routes/auth");
+const paymentRoute = require("./routes/payment");
 
 app.use("/auth", authRoute);
+app.use("/payment", paymentRoute);
 
 //You need to specificy SERVER_PORT as key:value in .env file
 app.listen(process.env.PORT || 5000, () => {
