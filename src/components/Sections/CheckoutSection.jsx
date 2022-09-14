@@ -4,10 +4,10 @@ import { store } from '../../controllers/store/store';
 import "../../styles/components/Sections/CheckoutSection.scss";
 import WarningIcon from '@mui/icons-material/Warning';
 import { generateCheckoutId, getShippingCountries, getShippingSubdivisions } from '../../controllers/eccommerce/checkout';
-import {Elements,CardElement,useStripe,useElements} from "@stripe/react-stripe-js";
-import {loadStripe} from "@stripe/stripe-js";
+// import {Elements,CardElement,useStripe,useElements} from "@stripe/react-stripe-js";
+// import {loadStripe} from "@stripe/stripe-js";
 
-const StripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
+// const StripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
 
 function CheckoutSection({isLoggedIn}) {
