@@ -10,7 +10,6 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import LogoutIcon from "@mui/icons-material/Logout";
-import LoginIcon from '@mui/icons-material/Login';
 import { useDispatch } from "react-redux";
 import { UserLogout } from "../controllers/store/reducers/authReducers";
 import Badge from "@mui/material/Badge";
@@ -210,17 +209,7 @@ function AccountMenu({ menuAnchor, closeMenu , isLoggedIn }) {
         </Link>
       </MenuItem>
       : 
-      <MenuItem
-        key={3}
-        onClick={() => {
-          closeMenu();
-        }}
-      >
-        <Link to="/my-account">
-          <LoginIcon />
-          Login
-        </Link>
-      </MenuItem>
+      null
       }
       
     </Menu>
