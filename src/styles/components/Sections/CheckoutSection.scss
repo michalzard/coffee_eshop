@@ -18,11 +18,12 @@
   }
   .checkout {
     display: flex;
+    margin-left:auto;
+    margin-right: auto;
   }
   .billing-info {
     display: flex;
     flex-direction: column;
-    border: 1px solid red;
     padding: 20px;
   }
   .order-info {
@@ -30,7 +31,8 @@
     flex-direction: column;
     padding: 20px;
 
-    section {
+    .prod-desc,
+    .checkout-product-summary {
       display: flex;
       justify-content: space-between;
     }
@@ -38,5 +40,12 @@
       border: 1px solid $primary;
       width: 100%;
     }
+  }
+  .address-form{
+    margin-top: 20px;
+  }
+  .termsError{
+    display: flex;
+    align-self: center;
   }
 }
