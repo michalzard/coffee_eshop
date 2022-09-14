@@ -52,3 +52,9 @@ export async function emptyCart() {
     })
     .catch((err) => console.log(err));
 }
+
+export async function refreshCart() {
+  return await commerce.cart.refresh().then((res) => {
+    return res;
+  });
+}

@@ -13,7 +13,6 @@ function CartContainer({ anchor, setCartAnchor, cartObject }) {
       anchor={"right"}
       open={Boolean(anchor)}
       onClose={() => setCartAnchor(null)}
-      onOpen={() => setCartAnchor(anchor)}
     >
       <section className="cart-container">
         <Close

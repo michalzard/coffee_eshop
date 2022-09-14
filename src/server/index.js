@@ -49,10 +49,8 @@ app.use(express.json());
 // app.use(express.urlencoded({ extended: true }));
 
 const authRoute = require("./routes/auth");
-const paymentRoute = require("./routes/payment");
 
 app.use("/auth", authRoute);
-app.use("/payment", paymentRoute);
 
 //You need to specificy SERVER_PORT as key:value in .env file
 app.listen(process.env.PORT || 5000, () => {

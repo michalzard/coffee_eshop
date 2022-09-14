@@ -8,7 +8,7 @@ const devEnvironment = process.env.NODE_ENV === "development";
 const commerceConfig = {
   axiosConfig: {
     headers: {
-      "X-Chec-Agent": "commerce.js/v2",
+      "X-Chec-Agent": "commerce.js/v1",
       "Chec-Version": "2021-09-29",
     },
   },
