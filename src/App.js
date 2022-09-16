@@ -8,7 +8,6 @@ import { LoadSession } from "./controllers/store/reducers/authReducers";
 import { getAllProducts } from "./controllers/store/reducers/productReducers";
 import CheckoutSection from "./components/Sections/CheckoutSection";
 
-
 function ScrollToTop() {
   //on every pathname change scroll to top to display important things
   const { pathname } = useLocation();
