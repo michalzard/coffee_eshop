@@ -22,8 +22,8 @@ function CartContainer({ anchor, setCartAnchor, cartObject }) {
           }}
         />
         {cartObject ? 
-        cartObject.items.length > 0 ? <>
-        <CartProducts products={cartObject.items} />
+        cartObject.line_items.length > 0 ? <>
+        <CartProducts products={cartObject.line_items} />
         <section className="subtotal">
         <Typography variant="h6" gutterBottom>Subtotal {cartObject.subtotal.formatted_with_symbol}</Typography>
         </section>

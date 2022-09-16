@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { BASE_URI } from "../../../lib/base_uri";
-import { CartRetrieve } from "./cartReducers";
+import { CartEmpty, CartRetrieve } from "./cartReducers";
 
 export const LoadSession = createAsyncThunk(
   "Auth/SessionLoad",
@@ -11,10 +11,12 @@ export const LoadSession = createAsyncThunk(
       .then((data) => {
         const { user } = data.data;
         if (user) dispatch(CartRetrieve());
+        else dispatch(CartEmpty());
         return user;
       })
       .catch((err) => {
         const { message } = err.response.data;
+        dispatch(CartEmpty());
         return rejectWithValue(message);
       });
   }

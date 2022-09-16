@@ -12,6 +12,7 @@ const commerceConfig = {
       "Chec-Version": "2021-09-29",
     },
   },
+  
 };
 
 if (devEnvironment && !checAPIKey) {

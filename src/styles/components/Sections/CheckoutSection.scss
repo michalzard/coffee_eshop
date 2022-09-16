@@ -49,3 +49,18 @@
     align-self: center;
   }
 }
+
+
+.order-confirmation{
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: lightgray;
+  margin-left:auto;
+  margin-right: auto;
+  .confirmation-footer{
+    display:flex;
+    flex-direction: column;
+    padding:0;
+  }
+}

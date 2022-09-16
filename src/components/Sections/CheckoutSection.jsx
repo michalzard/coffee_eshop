@@ -27,13 +27,13 @@ import {
 } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import { refreshCart } from "../../controllers/eccommerce/cart";
-
+import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 const StripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
 function CheckoutSection({ isLoggedIn }) {
   const [cart, loadCart] = useState({});
   const isObjectEmpty = (obj) => {
-    return obj && Object.keys(obj).length === 0;
+    return obj!==undefined && Object.keys(obj).length === 0;
   };
   store.subscribe(() => {
     const cart = store.getState().cart;
@@ -62,7 +62,6 @@ function CheckoutSection({ isLoggedIn }) {
   useEffect(() => {
     const loadCountries = async () => {
       const data = await getShippingCountries(checkoutToken);
-      console.log(data);
       const formattedCountries = Object.entries(data).map(([code, label]) => {
         return { code, label };
       });
@@ -119,12 +118,13 @@ function CheckoutSection({ isLoggedIn }) {
     if (terms) {
       try {
         //handle order
-        const incomingOrder = await captureOrder(checkoutTokenId, newOrder).then(data=>{
+        await captureOrder(checkoutTokenId, newOrder).then(data=>{
           console.log(data);
           setOrder(data);
           
         }).catch(err=>console.log(err));
         const newCart = await refreshCart();
+        console.log(newCart);
         loadCart(newCart);
       } catch (err) {
         console.log(err);
@@ -140,7 +140,9 @@ function CheckoutSection({ isLoggedIn }) {
 
   return (
     <section className="checkout-container">
-      {isLoggedIn ? (
+      {isLoggedIn ? 
+        <>
+        {/*!isObjectEmpty(order)*/ true ? <OrderConfirmation order={order}/> :
         <>
           <Typography variant="h3" gutterBottom>
             Checkout
@@ -209,8 +211,8 @@ function CheckoutSection({ isLoggedIn }) {
                 <Typography gutterBottom>Subtotal</Typography>
               </section>
               <section className="cart-items">
-                {!isObjectEmpty(cart)
-                  ? cart.items.map((item, i) => {
+                {!isObjectEmpty(cart) && cart.line_items.length > 0
+                  ? cart.line_items.map((item, i) => {
                       return <CheckoutProductSummary key={i} product={item} />;
                     })
                   : null}
@@ -219,7 +221,7 @@ function CheckoutSection({ isLoggedIn }) {
               <hr />
               <Typography gutterBottom style={{ alignSelf: "flex-end" }}>
                 Subtotal{" "}
-                {!isObjectEmpty(cart)
+                {!isObjectEmpty(cart) && cart.line_items.length > 0
                   ? cart.subtotal.formatted_with_symbol
                   : ""}
               </Typography>
@@ -279,14 +281,14 @@ function CheckoutSection({ isLoggedIn }) {
                 shippingID={shippingOptions}
                 handleOrder={handleOrder}
               />
-              {/*  */}
-              {/* <Button variant="contained" type="submit" onSubmit={handleOrder}>Order with payment obligation</Button> */}
             </article>
           </div>
+          </>
+        }
         </>
-      ) : (
-        <Typography>Checkout isn't available without login</Typography>
-      )}
+       : 
+        <Typography>Checkout isn't available without login </Typography>
+      }
     </section>
   );
 }
@@ -345,9 +347,9 @@ function AddressForm({
           onChange={(e) => {setRegion(e.target.value);}}
         >
           {regions.length > 0 ? (
-            regions.map((region) => {
+            regions.map((region,i) => {
               return (
-                <MenuItem key={region.code} value={region.code}>
+                <MenuItem key={i} value={region.code}>
                   {region.label} 
                 </MenuItem>
               );
@@ -395,7 +397,7 @@ function CheckoutProductSummary({ product }) {
   );
 }
 
-const PaymentForm = (props) => {
+function PaymentForm(props){
   const handleSubmit = async (e, elements, stripe) => {
     e.preventDefault(); //website will not refresh
     if (!stripe || !elements) return;
@@ -458,3 +460,35 @@ const PaymentForm = (props) => {
     </Elements>
   );
 };
+
+function OrderConfirmation({order}){
+  return(
+    <article className="order-confirmation">
+    <Typography>Order Confirmed!</Typography>
+    <Typography>Order number {order.customer_reference}</Typography>
+    <Typography>Ordered Items</Typography>
+    {
+      order.order.line_items.map((item,i)=>(
+      <section className="order-item" key={i}>
+        {/* {console.log(item)} */}
+      <img src={item.image.url} alt={item.image.filename} style={{width:"50px",height:"50px"}}/>
+      <Typography>{item.price.formatted_with_symbol} x {item.quantity}</Typography>
+      </section> 
+      ))
+    }
+    <Typography>Order Total {order.order_value.formatted_with_symbol}</Typography>
+    
+    <footer className="confirmation-footer">
+    <section>
+    <AlternateEmailIcon/>
+    <Typography>Any Questions?</Typography>
+    <Typography>if you need any help,emails us anytime <u>{order.merchant.support_email}</u></Typography>
+    </section>
+    <Typography>Following us?</Typography>
+    <section>
+      social icons
+    </section>
+    </footer>
+    </article>
+  )
+}

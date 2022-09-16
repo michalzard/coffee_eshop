@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
   CartAdd,
+  CartEmpty,
   CartRemove,
   CartRetrieve,
 } from "../store/reducers/cartReducers";
@@ -12,7 +13,7 @@ const cartSlice = createSlice({
     total_items: 0,
     unique_items: 0,
     subtotal: {},
-    items: [],
+    line_items: [],
     currency: {},
     discount: [],
     loading: false,
@@ -64,7 +65,7 @@ const cartSlice = createSlice({
       state.id = id;
       state.total_items = total_items;
       state.subtotal = subtotal;
-      state.items = line_items;
+      state.line_items = line_items;
       state.currency = currency;
       state.discount = discount;
       state.unique_items = total_unique_items;
@@ -72,6 +73,7 @@ const cartSlice = createSlice({
     [CartAdd.rejected]: (state) => {
       state.loading = true;
     },
+    //Remove
     [CartRemove.pending]: (state) => {
       state.loading = true;
     },
@@ -89,14 +91,23 @@ const cartSlice = createSlice({
       state.id = id;
       state.total_items = total_items;
       state.subtotal = subtotal;
-      state.items = line_items;
+      state.line_items = line_items;
       state.currency = currency;
       state.discount = discount;
       state.unique_items = total_unique_items;
     },
-    [CartRemove.rejected]: (state,action) => {
+    [CartRemove.rejected]: (state) => {
+      state.loading = false;
+    },
+    [CartEmpty.pending]: (state) => {
+      state.loading = true;
+    },
+    [CartEmpty.fulfilled]: (state, action) => {
       state.loading = false;
       console.log(action);
+    },
+    [CartEmpty.rejected]: (state) => {
+      state.loading = true;
     },
   },
 });

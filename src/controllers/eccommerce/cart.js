@@ -44,9 +44,9 @@ export async function removeFromCart(lineId) {
     .catch((err) => console.log(err));
 }
 
-export async function emptyCart() {
+export async function deleteCart() {
   return await commerce.cart
-    .empty()
+    .delete()
     .then((res) => {
       return res;
     })
