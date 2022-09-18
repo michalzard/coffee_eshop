@@ -6,6 +6,53 @@
 
 # Getting Started with Create React App
 
+### TODO LIST
+```
+Handle Account related stuff like
+
+Payment method
+- integrate stripe
+
+Delivery address & the other
+- address info will be held in eccommercejs backend
+
+Orders
+- this needs to be pulled by eccomercejs backend
+
+
+(IMPORTANT)
+On Login create eccomercejs customer object in the backend
+
+
+
+Home
+- create e-shop logo and add it to header/footer
+
+Contact
+- fix css
+
+About , Contact
+- make it work on mobile
+
+/login and register remove pw field from response
+
+/commerce.cart.delete() if unable to login to create diff cart_id for new cx
+
+
+Checkout -> finish displaying of products
+
+
+
+Scroll to top again not working !!!!
+Scroll slide transition not working on desktop bcs of conditional rendering
+
+Refactor Header
+
+Refactor Cart Drawer
+
+onProduct AddToCart check if person is logged in
+
+```
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
