@@ -1,9 +1,13 @@
 @import "../../Theme.scss";
 .checkout-container {
   height: 100vh;
+  @media (max-width: 800px) {
+    height: 150vh;
+  }
   display: flex;
   flex-direction: column;
   padding: 20px;
+
   h3 {
     text-align: center;
     color: $primary;
@@ -18,8 +22,18 @@
   }
   .checkout {
     display: flex;
-    margin-left:auto;
+    margin-left: auto;
     margin-right: auto;
+
+    @media (max-width: 800px) {
+      width: 350px;
+      flex-direction: column;
+      .name {
+        div {
+          width: 100%;
+        }
+      }
+    }
   }
   .billing-info {
     display: flex;
@@ -41,26 +55,85 @@
       width: 100%;
     }
   }
-  .address-form{
+  .address-form {
     margin-top: 20px;
   }
-  .termsError{
+  .termsError {
     display: flex;
     align-self: center;
   }
+  // .checkout{
+  //   display: flex;
+  //   @media (max-width:800px) {
+  //     width: 350px;
+  //     flex-direction: column;
+  //   }
+  // }
 }
 
-
-.order-confirmation{
-  display:flex;
+.order-confirmation {
+  display: flex;
   flex-direction: column;
   justify-content: center;
-  background-color: lightgray;
-  margin-left:auto;
+  background-color: whitesmoke;
+  margin-left: auto;
   margin-right: auto;
-  .confirmation-footer{
-    display:flex;
+  border-radius: 10px;
+  box-shadow: 0 5px 4px $primary;
+  padding: 20px;
+  padding-bottom: 0;
+  a {
+    color: $primary;
+  }
+  .confirmation-footer {
+    display: flex;
     flex-direction: column;
-    padding:0;
+    padding: 0;
+    .footer-links {
+      display: flex;
+      justify-content: space-around;
+      svg {
+        color: $primary;
+        font-size: 30px;
+        margin-top: 10px;
+      }
+    }
+  }
+  .support {
+    display: flex;
+    svg {
+      margin-right: 20px;
+      align-self: center;
+    }
+    .info {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  .btns {
+    display: flex;
+    justify-content: space-around;
+    a {
+      text-decoration: none;
+    }
+    button {
+      color: $primary;
+      border: 1px solid $primary;
+    }
+  }
+
+  .order-item-separator {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.checkout-unavailable {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  svg {
+    max-width: 100%;
   }
 }

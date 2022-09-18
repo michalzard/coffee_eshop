@@ -37,7 +37,7 @@ const cartSlice = createSlice({
       state.id = id;
       state.total_items = total_items;
       state.subtotal = subtotal;
-      state.items = line_items;
+      state.line_items = line_items;
       state.currency = currency;
       state.discount = discount;
       state.unique_items = total_unique_items;
@@ -104,7 +104,10 @@ const cartSlice = createSlice({
     },
     [CartEmpty.fulfilled]: (state, action) => {
       state.loading = false;
-      console.log(action);
+      state.total_items= 0;
+      state.unique_items=0;
+      state.subtotal={};
+      state.line_items=[];
     },
     [CartEmpty.rejected]: (state) => {
       state.loading = true;

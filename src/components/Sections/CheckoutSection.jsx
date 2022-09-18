@@ -28,10 +28,19 @@ import {
 import { loadStripe } from "@stripe/stripe-js";
 import { refreshCart } from "../../controllers/eccommerce/cart";
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
-const StripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
+import FacebookIcon from "@mui/icons-material/Facebook";
+import TwitterIcon from "@mui/icons-material/Twitter";
+import InstagramIcon from "@mui/icons-material/Instagram";
+import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { CartEmpty } from "../../controllers/store/reducers/cartReducers";
+import {ReactComponent as EmptyCart} from "../../assets/empty_cart.svg";
 
+
+const StripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 function CheckoutSection({ isLoggedIn }) {
   const [cart, loadCart] = useState({});
+  const dispatch = useDispatch();
   const isObjectEmpty = (obj) => {
     return obj!==undefined && Object.keys(obj).length === 0;
   };
@@ -43,6 +52,7 @@ function CheckoutSection({ isLoggedIn }) {
   const [checkoutToken, setCheckoutToken] = useState("");
   const [shippingOptions, setShippingOptions] = useState("");
   const [order, setOrder] = useState({});
+  const [orderErrors,setOrderErrors] = useState({});
   useEffect(() => {
     const cart = store.getState().cart;
     if (cart) loadCart(cart);
@@ -94,7 +104,7 @@ function CheckoutSection({ isLoggedIn }) {
       if(id){setShippingOptions(id);}
     };
     
-    if(checkoutToken.length > 0 && selectedCountry.length>0){console.log('subdivision loading with',selectedCountry,checkoutToken);loadSubdivision();}
+    if(checkoutToken.length > 0 && selectedCountry.length>0){loadSubdivision();}
    
   }, [selectedCountry,checkoutToken]);
 
@@ -119,12 +129,11 @@ function CheckoutSection({ isLoggedIn }) {
       try {
         //handle order
         await captureOrder(checkoutTokenId, newOrder).then(data=>{
-          console.log(data);
+          if(data.error.errors) setOrderErrors(data.error.errors);
           setOrder(data);
-          
-        }).catch(err=>console.log(err));
+          dispatch(CartEmpty());
+        }).catch(err=>{console.log(err)});
         const newCart = await refreshCart();
-        console.log(newCart);
         loadCart(newCart);
       } catch (err) {
         console.log(err);
@@ -140,9 +149,9 @@ function CheckoutSection({ isLoggedIn }) {
 
   return (
     <section className="checkout-container">
-      {isLoggedIn ? 
+      {isLoggedIn && !isObjectEmpty(cart) && cart.line_items.length>0 ? 
         <>
-        {/*!isObjectEmpty(order)*/ true ? <OrderConfirmation order={order}/> :
+        {!isObjectEmpty(order) ? <OrderConfirmation order={order}/> :
         <>
           <Typography variant="h3" gutterBottom>
             Checkout
@@ -287,7 +296,7 @@ function CheckoutSection({ isLoggedIn }) {
         }
         </>
        : 
-        <Typography>Checkout isn't available without login </Typography>
+        <CheckoutUnavailable/>
       }
     </section>
   );
@@ -462,33 +471,58 @@ function PaymentForm(props){
 };
 
 function OrderConfirmation({order}){
+  const textAlignCenter ={textAlign:"center"};
   return(
     <article className="order-confirmation">
-    <Typography>Order Confirmed!</Typography>
-    <Typography>Order number {order.customer_reference}</Typography>
-    <Typography>Ordered Items</Typography>
+    <Typography variant="h4" style={textAlignCenter} >Order Confirmed!</Typography>
+    <Typography variant="subtitle1"gutterBottom style={textAlignCenter}>Order reference number <u>{order.customer_reference}</u></Typography>
+    <section className="order-item-separator">
+    <Typography variant="subtitle1"gutterBottom>Ordered Items</Typography>
+    <Typography variant="subtitle1"gutterBottom>Item Subtotal</Typography>
+    </section>
     {
       order.order.line_items.map((item,i)=>(
-      <section className="order-item" key={i}>
+      <section className="order-item order-item-separator" key={i}>
         {/* {console.log(item)} */}
-      <img src={item.image.url} alt={item.image.filename} style={{width:"50px",height:"50px"}}/>
-      <Typography>{item.price.formatted_with_symbol} x {item.quantity}</Typography>
+      <Typography variant="subtitle1" gutterBottom>{item.product_name} {item.price.formatted_with_symbol} x {item.quantity}</Typography>
+      
+      <Typography variant="subtitle1" gutterBottom>{item.line_total.formatted_with_symbol} </Typography>
       </section> 
       ))
     }
-    <Typography>Order Total {order.order_value.formatted_with_symbol}</Typography>
-    
+    <section className="order-item-separator">
+    <Typography variant="h6" gutterBottom>Order Subtotal</Typography>
+    <Typography variant="h6" gutterBottom>{order.order_value.formatted_with_symbol}</Typography>
+
+    </section>
+    <section className="btns">
+    <Link to="/"><Button variant="outlined" size="small">Continue Shopping</Button></Link>
+    <Link to="/my-account/orders"><Button variant="outlined" size="small">Preview orders</Button></Link>
+    </section>
     <footer className="confirmation-footer">
-    <section>
+    <section className="support">
     <AlternateEmailIcon/>
-    <Typography>Any Questions?</Typography>
-    <Typography>if you need any help,emails us anytime <u>{order.merchant.support_email}</u></Typography>
+    <div className="info">
+    <Typography variant="subtitle2">Any Questions?</Typography>
+    <Typography variant="caption">if you need any help,emails us anytime <a href={`mailto:${order.merchant.support_email}`}>{order.merchant.support_email}</a></Typography>
+    </div>
     </section>
     <Typography>Following us?</Typography>
-    <section>
-      social icons
+    <section className="footer-links">
+    <a href="https://facebook.com/example" target="_blank" rel="noreferrer"><FacebookIcon /> </a>
+    <a href="https://twitter.com/example" target="_blank" rel="noreferrer"><TwitterIcon /> </a>
+    <a href="https://instagram.com/example" target="_blank" rel="noreferrer"><InstagramIcon /> </a>
     </section>
     </footer>
     </article>
+  )
+}
+
+function CheckoutUnavailable(){
+  return(
+    <section className="checkout-unavailable">
+      <Typography variant="h5" gutterBottom>Checkout isn't available when its empty.</Typography>
+      <EmptyCart/>
+    </section>
   )
 }
