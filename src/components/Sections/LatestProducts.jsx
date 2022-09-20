@@ -3,9 +3,11 @@ import React, { useEffect, useState } from "react";
 import ProductThumbnail from "../Products/ProductThumbnail";
 import "../../styles/components/Products/global.scss";
 import { store } from "../../controllers/store/store";
+import { useNavigate } from "react-router-dom";
 
-function LatestProducts() {
+function LatestProducts({isLoggedIn}) {
   const [thumbnails, setThumbnails] = useState([]);
+  const navigate = useNavigate();
 
   store.subscribe(() => {
     const products = store.getState().productsState.products;
@@ -29,11 +31,18 @@ function LatestProducts() {
               name={thumbnail.name}
               img={thumbnail.image.url}
               pricing={thumbnail.price.formatted_with_symbol}
+              isLoggedIn={isLoggedIn}
             />
           );
         })}
       </section>
-      <Button variant="outlined" className="showAll">
+      <Button
+        variant="outlined"
+        className="showAll"
+        onClick={() => {
+          navigate("/fresh-coffee");
+        }}
+      >
         Show all products
       </Button>
     </section>

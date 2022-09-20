@@ -18,7 +18,7 @@ import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { CartAdd } from "../../controllers/store/reducers/cartReducers";
 
-function ProductOrder() {
+function ProductOrder({isLoggedIn}) {
   const { id } = useParams();
   const dispatch = useDispatch();
   const unlockScroll = { disableScrollLock: true };
@@ -202,10 +202,10 @@ function ProductOrder() {
                 variant="contained"
                 color="success"
                 size="large"
-                disabled={isLoading}
+                disabled={!isLoggedIn || isLoading}
                 onClick={addProductToCart}
               >
-                Add to cart
+                {isLoggedIn ? "Add to cart" : "Login to buy"}
               </Button>
             </div>
           </section>

@@ -51,8 +51,8 @@ function App() {
             <>
               <Carousel />
               <DeliverySection />
-              <LatestProducts />
-              <FavouriteProducts />
+              <LatestProducts/>
+              <FavouriteProducts/>
               <AboutUsSection />
             </>
           }
@@ -60,7 +60,7 @@ function App() {
 
         <Route path="contact" element={<Contact />} />
         <Route path="about-us" element={<About />} />
-        <Route path="fresh-coffee" element={<FreshCoffee />} />
+        <Route path="fresh-coffee" element={<FreshCoffee isLoggedIn={isLoggedIn} />} />
 
         <Route
           path="my-account"
@@ -73,7 +73,7 @@ function App() {
         </Route>
         <Route path="/checkout" element={<CheckoutSection isLoggedIn={isLoggedIn} />}/>
 
-        <Route path="product/:id" element={<ProductOrder />} />
+        <Route path="product/:id" element={<ProductOrder isLoggedIn={isLoggedIn}/>} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>

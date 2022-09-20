@@ -10,7 +10,7 @@ import {
 import ProductThumbnail from "../Products/ProductThumbnail";
 import { store } from "../../controllers/store/store";
 
-function FreshCoffee() {
+function FreshCoffee({isLoggedIn}) {
   const [prepValue, setPrepValue] = useState("");
   const [thumbnails, setThumbnails] = useState([]);
 
@@ -75,9 +75,11 @@ function FreshCoffee() {
           return (
             <ProductThumbnail
               key={thumbnail.id}
+              id={thumbnail.id}
               name={thumbnail.name}
               img={thumbnail.image.url}
               pricing={thumbnail.price.formatted_with_symbol}
+              isLoggedIn={isLoggedIn}
             />
           );
         })}
